@@ -2,13 +2,13 @@ import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
 
 interface CartItemProps {
-  id: number;
+  id: string | number;
   name: string;
   variant: string;
   pricePerUnit: number;
   quantity: number;
   imageSrc: string;
-  onUpdateQuantity: (id: number, delta: number) => void;
+  onUpdateQuantity: (id: string | number, delta: number) => void;
 }
 
 export default function CartItem({

@@ -60,20 +60,47 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-32 pb-20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <div className="min-h-screen bg-zinc-50">
+      {/* Cinematic Hero */}
+      <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
+        <Image
+          src="/hero.jpg"
+          alt="Admin Hero"
+          fill
+          className="object-cover scale-105 brightness-[0.7]"
+          priority
+        />
         
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <div className="absolute inset-0 z-0 bg-black/20"></div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="relative z-10 text-center px-6"
+        >
+          {/* <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-500 mb-4 block">
+            Mac Bancy Atelier
+          </span> */}
+          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none italic drop-shadow-lg">
+            Management Suite
+          </h1>
+        </motion.div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 -mt-12 relative z-20 pb-20">
+        
+        {/* Actions Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 bg-white p-8 rounded-3xl border border-zinc-100 shadow-xl">
           <div>
-            <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">Admin Atelier</h1>
-            <p className="text-zinc-500">Manage your luxury collection and stock status.</p>
+            <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">Collection Inventory</h2>
+            <p className="text-sm text-zinc-500">Monitor and refine your luxury scent library.</p>
           </div>
           <Link 
             href="/admin/add"
-            className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
+            className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 rounded-2xl font-bold text-sm hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
           >
-            <Plus size={18} />
+            <Plus size={20} />
             Add New Scent
           </Link>
         </div>
