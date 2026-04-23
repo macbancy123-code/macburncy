@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Products Collection
+    match /products/{productId} {
+      // Allow everyone to view products
+      allow read: if true;
+      
+      // Allow write access (Create, Update, Delete) 
+      // For now, allowing all writes while in development. 
+      // In production, you should restrict this to authenticated admins only.
+      allow write: if true;
+    }
+    
+    // Contact Submissions (if added later)
+    match /submissions/{submissionId} {
+      allow create: if true;
+      allow read, update, delete: if false; // Only admin can read from Firebase Console
+    }
+  }
+}

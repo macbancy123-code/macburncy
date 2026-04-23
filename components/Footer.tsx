@@ -41,6 +41,11 @@ export default function Footer() {
                   Contact Us
                 </Link>
               </li>
+              <li>
+                <Link href="/admin" className="text-zinc-400/30 hover:text-white transition-colors text-[10px] font-medium tracking-widest uppercase">
+                  System
+                </Link>
+              </li>
             </ul>
           </div>
 
