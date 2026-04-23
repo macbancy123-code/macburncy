@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { motion } from "motion/react";
 import { ChevronLeft, Save, Upload, Plus, X } from "lucide-react";
