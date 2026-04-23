@@ -32,9 +32,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      {/* Spacer for floating navbar */}
-      <div className="h-32 md:h-44"></div>
-
       {/* Navigation / Breadcrumbs */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8 md:hidden">
         <Link 
@@ -77,11 +74,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               </div>
 
               {/* Price and Rating */}
-              <div className="flex items-center justify-between py-4 border-y border-zinc-100">
-                <div className="text-3xl font-bold text-black border-r border-zinc-100 pr-8">
+              <div className="flex items-center justify-between py-4">
+                <div className="text-3xl font-bold text-black pr-8">
                   {product.price}
                 </div>
-                <div className="flex items-center gap-2 pl-8">
+                <div className="flex items-center gap-2">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star 

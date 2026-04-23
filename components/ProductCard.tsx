@@ -43,11 +43,10 @@ export default function ProductCard({ id, name, description, price, rating, imag
         <div className="mt-2 sm:mt-3 flex items-center justify-between">
           <Link
             href={`/product/${id}`}
-            className="inline-flex items-center justify-center rounded-full bg-black text-white px-5 py-2 sm:px-7 sm:py-2.5 text-[0.7rem] sm:text-sm font-bold transition-all duration-300 hover:bg-zinc-800 hover:shadow-xl hover:shadow-black/10 active:scale-95 whitespace-nowrap"
+            className="inline-flex items-center justify-center rounded-xl bg-black text-white px-5 py-2 sm:px-7 sm:py-2.5 text-[0.7rem] sm:text-sm font-bold transition-all duration-300 hover:bg-zinc-800 hover:shadow-xl hover:shadow-black/10 active:scale-95 whitespace-nowrap"
           >
             {price}
           </Link>
-          
           <Link href={`/product/${id}`} className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors hidden sm:block">
             Details
           </Link>

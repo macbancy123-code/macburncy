@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
@@ -11,27 +12,30 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Spacer for floating navbar */}
-      <div className="h-32 md:h-44"></div>
-
-      {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[300px] w-full overflow-hidden">
-        {/* Background Image with Blur */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/p1.jpg" // Using p1 as a thematic background
-            alt="Hero Background"
-            fill
-            className="object-cover blur-md scale-105 brightness-[0.4]"
-            priority
-          />
-        </div>
+      {/* Cinematic Hero */}
+      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
+        <Image
+          src="/hero.jpg"
+          alt="Shopping Bag Hero"
+          fill
+          className="object-cover scale-105"
+          priority
+        />
         
-        {/* Hero Content */}
-        <div className="relative z-10 flex h-full items-center justify-center pt-32 px-6">
-          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-center drop-shadow-2xl">
-            Your Shopping Bag
-          </h1>
+        <div className="absolute inset-0 z-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="relative z-10 flex h-full flex-col items-center justify-center px-6"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-600 mb-4 block">
+              Mac Bancy
+            </span>
+            <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none italic drop-shadow-lg">
+              Your Shopping Bag
+            </h1>
+          </motion.div>
         </div>
       </section>
 

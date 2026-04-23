@@ -31,7 +31,7 @@ export default function Navbar() {
   }, []);
 
   const isProductPage = pathname.startsWith("/product/");
-  const isSolid = scrolled || pathname === "/shop" || isProductPage;
+  const isSolid = scrolled || pathname === "/shop" || pathname === "/contact" || isProductPage;
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -45,11 +45,10 @@ export default function Navbar() {
       <div className="relative w-[95%] max-w-7xl">
         {/* Main bar */}
         <div
-          className={`flex items-center justify-between px-6 rounded-2xl transition-all duration-300 ${
-            isSolid
-              ? "bg-black/90 backdrop-blur-lg border border-white/10 py-3 shadow-2xl"
-              : "bg-black/20 backdrop-blur-sm border border-white/5 py-5"
-          }`}
+          className={`flex items-center justify-between px-6 rounded-2xl transition-all duration-300 ${isSolid
+            ? "bg-black/90 backdrop-blur-lg border border-white/10 py-3 shadow-2xl"
+            : "bg-black/20 backdrop-blur-sm border border-white/5 py-5"
+            }`}
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -71,11 +70,10 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                      isActive
-                        ? "bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                        : "text-white/70 hover:text-white"
-                    }`}
+                    className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${isActive
+                      ? "bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                      : "text-white/70 hover:text-white"
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -133,11 +131,10 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 rounded-full text-sm font-medium transition-all ${
-                      isActive
-                        ? "bg-white/20 text-white"
-                        : "text-white/70 hover:text-white"
-                    }`}
+                    className={`px-4 py-3 rounded-full text-sm font-medium transition-all ${isActive
+                      ? "bg-white/20 text-white"
+                      : "text-white/70 hover:text-white"
+                      }`}
                   >
                     {link.name}
                   </Link>

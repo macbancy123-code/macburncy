@@ -1,288 +1,132 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ArrowRight } from "lucide-react";
 
 export default function ContactPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <main className="w-full max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-24">
-        <div className="grid lg:grid-cols-2 gap-20">
+      {/* Spacer for fixed navbar */}
+      <div className="h-32 md:h-40"></div>
+
+      <main className="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex-grow">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
 
           {/* Left Column: Info */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col"
+            className="flex flex-col gap-10"
           >
-            <div className="flex gap-2 mb-8">
-              <div className="h-1 w-12 bg-black"></div>
-              <div className="h-1 w-3 bg-zinc-200"></div>
+            <div>
+              <div className="flex gap-2 mb-8">
+                <div className="h-1 w-12 bg-zinc-900"></div>
+                <div className="h-1 w-3 bg-zinc-200"></div>
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-zinc-900">
+                Contact <br />
+                <span className="italic font-light text-zinc-400">The Atelier</span>
+              </h1>
+              <p className="text-lg text-zinc-500 font-light leading-relaxed max-w-md">
+                Whether you&apos;re seeking a signature scent or have inquiries
+                about our custom formulations, our consultants are here to guide
+                you.
+              </p>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 leading-tight mb-8">
-              Contact <br />
-              <span className="font-serif italic font-light text-zinc-400 text-4xl md:text-5xl">
-                The Atelier
-              </span>
-            </h1>
-
-            <p className="text-xl text-zinc-500 font-light leading-relaxed mb-12 max-w-md">
-              Whether you&apos;re seeking a signature scent or have inquiries
-              about our custom formulations, our consultants are here to guide
-              you.
-            </p>
-
-            <div className="space-y-8">
-              {/* Email */}
-              <div className="flex items-start gap-6 group">
-                <div
-                  className="group-hover:border-black group-hover:text-black transition-all"
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    minWidth: "48px",
-                    borderRadius: "50%",
-                    border: "1px solid #f4f4f5",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#a1a1aa",
-                  }}
-                >
-                  <Mail size={20} />
+            <div className="space-y-10">
+              {/* Contact Items */}
+              {[
+                { icon: Mail, label: 'Email Us', value: 'concierge@macbancy.com' },
+                { icon: Phone, label: 'Inquiry Line', value: '+233 (0) 24 225 0574' },
+                { icon: MapPin, label: 'Main Atelier', value: 'Ghana — West Africa' }
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-8 group">
+                  <div className="w-14 h-14 rounded-full border border-zinc-100 flex items-center justify-center text-zinc-400 group-hover:border-amber-600 group-hover:text-amber-600 transition-all duration-500 bg-white shadow-sm">
+                    <item.icon size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-600 mb-1.5">
+                      {item.label}
+                    </h4>
+                    <p className="text-zinc-900 font-medium text-lg">
+                      {item.value}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-1">
-                    Email Us
-                  </h4>
-                  <p className="text-zinc-900 font-medium">
-                    concierge@nioba-heritage.com
-                  </p>
-                </div>
-              </div>
-
-              {/* Phone */}
-              <div className="flex items-start gap-6 group">
-                <div
-                  className="group-hover:border-black group-hover:text-black transition-all"
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    minWidth: "48px",
-                    borderRadius: "50%",
-                    border: "1px solid #f4f4f5",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#a1a1aa",
-                  }}
-                >
-                  <Phone size={20} />
-                </div>
-                <div>
-                  <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-1">
-                    Inquiry Line
-                  </h4>
-                  <p className="text-zinc-900 font-medium">
-                    +33 (0) 1 45 67 89 00
-                  </p>
-                </div>
-              </div>
-
-              {/* Location */}
-              <div className="flex items-start gap-6 group">
-                <div
-                  className="group-hover:border-black group-hover:text-black transition-all"
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    minWidth: "48px",
-                    borderRadius: "50%",
-                    border: "1px solid #f4f4f5",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#a1a1aa",
-                  }}
-                >
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-1">
-                    Main Atelier
-                  </h4>
-                  <p className="text-zinc-900 font-medium leading-relaxed">
-                    12 Rue de l&apos;Héritage, Paris, France <br />
-                    Vicente Way, Lagos, Nigeria
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Right Column: Form */}
+          {/* Right Column: Modern Form */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            style={{
-              background: "#fafafa",
-              borderRadius: "32px",
-              padding: "48px",
-              border: "1px solid #f0f0f0",
-              boxShadow:
-                "0 20px 60px -10px rgba(0,0,0,0.08), 0 4px 20px -4px rgba(0,0,0,0.04)",
-            }}
+            className="bg-zinc-50/50 rounded-[2.5rem] p-10 md:p-16 border border-zinc-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)]"
           >
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 px-1">
-                    First Name
+            <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
+                    Your Name
                   </label>
                   <input
                     type="text"
-                    style={{
-                      width: "100%",
-                      background: "white",
-                      border: "1px solid #f4f4f5",
-                      borderRadius: "16px",
-                      padding: "16px 24px",
-                      fontSize: "14px",
-                      outline: "none",
-                      boxSizing: "border-box",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#000")}
-                    onBlur={(e) => (e.target.style.borderColor = "#f4f4f5")}
+                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none focus:border-amber-600 transition-all shadow-sm"
                     placeholder="Enter name..."
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 px-1">
+                <div className="space-y-3">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
                     Email Address
                   </label>
                   <input
                     type="email"
-                    style={{
-                      width: "100%",
-                      background: "white",
-                      border: "1px solid #f4f4f5",
-                      borderRadius: "16px",
-                      padding: "16px 24px",
-                      fontSize: "14px",
-                      outline: "none",
-                      boxSizing: "border-box",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#000")}
-                    onBlur={(e) => (e.target.style.borderColor = "#f4f4f5")}
+                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none focus:border-amber-600 transition-all shadow-sm"
                     placeholder="email@example.com"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 px-1">
+              <div className="space-y-3">
+                <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
                   Nature of Inquiry
                 </label>
-                <div style={{ position: "relative" }}>
+                <div className="relative">
                   <select
-                    style={{
-                      width: "100%",
-                      background: "white",
-                      border: "1px solid #f4f4f5",
-                      borderRadius: "16px",
-                      padding: "16px 24px",
-                      fontSize: "14px",
-                      outline: "none",
-                      appearance: "none",
-                      boxSizing: "border-box",
-                      cursor: "pointer",
-                    }}
+                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none appearance-none cursor-pointer focus:border-amber-600 transition-all shadow-sm"
                   >
-                    <option>Collection Inquiry</option>
+                    <option>General Collection</option>
                     <option>Custom Formulation</option>
-                    <option>Press &amp; Media</option>
-                    <option>Wholesale Partnerships</option>
+                    <option>Wholesale & Distribution</option>
+                    <option>Press & Media</option>
                   </select>
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: "20px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      pointerEvents: "none",
-                      color: "#a1a1aa",
-                    }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path
-                        d="M2 4l4 4 4-4"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                    <ArrowRight size={16} className="rotate-90" />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 px-1">
+              <div className="space-y-3">
+                <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
                   Your Message
                 </label>
                 <textarea
                   rows={6}
-                  style={{
-                    width: "100%",
-                    background: "white",
-                    border: "1px solid #f4f4f5",
-                    borderRadius: "16px",
-                    padding: "16px 24px",
-                    fontSize: "14px",
-                    outline: "none",
-                    resize: "none",
-                    boxSizing: "border-box",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = "#000")}
-                  onBlur={(e) => (e.target.style.borderColor = "#f4f4f5")}
+                  className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none resize-none focus:border-amber-600 transition-all shadow-sm"
                   placeholder="How can we assist you?"
                 />
               </div>
 
               <button
                 type="submit"
-                style={{
-                  width: "100%",
-                  background: "#000",
-                  color: "#fff",
-                  borderRadius: "9999px",
-                  padding: "20px",
-                  fontSize: "11px",
-                  fontWeight: "700",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "12px",
-                  border: "none",
-                  cursor: "pointer",
-                  transition: "background 0.3s",
-                }}
-                onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "#27272a")
-                }
-                onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "#000")
-                }
+                className="w-full bg-zinc-900 text-white rounded-full py-6 text-[10px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-4 group hover:bg-amber-600 transition-all duration-500 shadow-xl"
               >
                 Send Message
-                <Send size={14} />
+                <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
             </form>
           </motion.div>

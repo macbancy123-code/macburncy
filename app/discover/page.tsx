@@ -11,7 +11,6 @@ const products = [
     subtitle: "Original",
     description:
       "A signature scent from the house of Macbancy, is the perfect everyday fragrance for the man of the day, the party enthusiast, the professional, and the sophisticated woman alike.",
-    layout: "image-left",
     imageBg: "#1a1a2e",
     imageSrc: "/p1.jpg"
   },
@@ -21,7 +20,6 @@ const products = [
     subtitle: "Citrus de Medici",
     description:
       "A blend of zesty freshness of bergamot, black currant, and lemon with a hint of spicy pink pepper. The heart notes of enchanting patchouli and jasmine will captivate your senses, while the rich base notes of cedarwood and oakmoss create a lasting impression.",
-    layout: "text-full-image-right",
     imageBg: "#2d1b0e",
     imageSrc: "/p2.jpg"
   },
@@ -31,7 +29,6 @@ const products = [
     subtitle: "Village Noire",
     description:
       "Is a Floral Fruity Gourmand fragrance for women and men. Top notes are Red Apple, Lichi, Black Currant and Pink Grapefruit; middle notes are Wild Berries, Raspberry Bicon; base notes are Sugar, Musk, Vanilla Flower, Amber and Moss.",
-    layout: "image-left",
     imageBg: "#1e3a5f",
     imageSrc: "/p3.jpg"
   },
@@ -41,7 +38,6 @@ const products = [
     subtitle: "Multi-colonial",
     description:
       "Is a Oriental Spicy fragrance for women and men. Top notes are Black and Pink Pepper, Black Pepper, elemi and Pink Pepper; middle notes are Olibanum and Saffron; base notes are Bourbon Vanilla, Suede and Cedar.",
-    layout: "text-full-image-right",
     imageBg: "#1a0a00",
     imageSrc: "/p4.jpg"
   },
@@ -51,7 +47,6 @@ const products = [
     subtitle: "Toffee Infernol",
     description:
       "Is a Oriental Spicy fragrance for women and men. Top notes are Cinnamon, Cherry, Sicilian Lemon and Nutmeg; middle notes are Coca-Cola, Indonesian Patchouli Leaf and Orange Blossom; base notes are Tonka Bean, Vanilla, Benzoin and Labdanum.",
-    layout: "image-left",
     imageBg: "#3d1a00",
     imageSrc: "/p5.jpg"
   },
@@ -61,7 +56,6 @@ const products = [
     subtitle: "Oud Exemo",
     description:
       "Just as the rhythm of the African drum echoes across the land, so does the scent of our beloved Oud Daema bold, timeless, and unforgettable.",
-    layout: "text-full-image-right",
     imageBg: "#0a0a0a",
     imageSrc: "/p6.jpg"
   },
@@ -70,7 +64,6 @@ const products = [
     name: "Woods of Oregon",
     subtitle: "Brea",
     description: "Is a Floral Woody Musk fragrance for women and men.",
-    layout: "image-left",
     imageBg: "#003366",
     imageSrc: "/p7.jpg"
   },
@@ -80,7 +73,6 @@ const products = [
     subtitle: "Side Mount",
     description:
       "Is a Woody Spicy fragrance for men and women. Top note is Whiskey; middle notes are Spicy Notes, Cinnamon an Sheabutter.",
-    layout: "text-full-image-right",
     imageBg: "#8b1a1a",
     imageSrc: "/p8.jpg"
   },
@@ -90,7 +82,6 @@ const products = [
     subtitle: "",
     description:
       "Is a limited edition two in one collection, musky and oriental for men and women.",
-    layout: "image-left",
     imageBg: "#2d4a1e",
     imageSrc: "/p9.jpg"
   },
@@ -100,7 +91,6 @@ const products = [
     subtitle: "",
     description:
       "An intriguing 2-in-1 collection designed for both him and her: a bold fragrance perfect for those with complex tastes.",
-    layout: "text-full-image-right",
     imageBg: "#1a1a3e",
     imageSrc: "/p1.jpg"
   },
@@ -110,7 +100,6 @@ const products = [
     subtitle: "",
     description:
       "Three distinctive fragrances that embody mystery, confidence, and charm. Which one matches your style?",
-    layout: "image-left",
     imageBg: "#0a1a2e",
     imageSrc: "/p2.jpg"
   },
@@ -120,7 +109,6 @@ const products = [
     subtitle: "Kante",
     description:
       "Kante is a fragrance inspired by the legendary Mali Empire ruler Sundianguru Kante, capturing his strength, wisdom, and mystique through bold, rich notes that honor his enduring legacy.",
-    layout: "text-full-image-right",
     imageBg: "#8b4513",
     imageSrc: "/p3.jpg"
   },
@@ -130,7 +118,6 @@ const products = [
     subtitle: "Sheba",
     description:
       "SHEBA is a fragrance inspired by Queen Sheba, capturing her grace, wisdom, and regal beauty. With rich, luxurious notes, it celebrates timeless femininity, strength, and elegance.",
-    layout: "image-left",
     imageBg: "#4a0028",
     imageSrc: "/p4.jpg"
   },
@@ -140,434 +127,103 @@ const products = [
     subtitle: "Ndewura",
     description:
       "Ndewura is a fragrance inspired by Ndewura Jakpa, founder of the Gonja Empire. It reflects his leadership, courage, and ancestral strength with bold, earthy notes that honor tradition and vitality.",
-    layout: "text-full-image-right",
     imageBg: "#1a3d1a",
     imageSrc: "/p5.jpg"
   },
 ];
 
-function ProductImage({ src, name }: { src: string; name: string }) {
+function ProductRow({ product, index }: { product: typeof products[0]; index: number }) {
+  const isReversed = index % 2 !== 0;
+
   return (
     <div
-      style={{
-        width: "100%",
-        aspectRatio: "1/1",
-        borderRadius: "12px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        position: "relative",
-        boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-      }}
+      className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-20 mb-16 lg:mb-24 ${
+        isReversed ? "lg:flex-row-reverse" : ""
+      }`}
     >
-      <Image
-        src={src}
-        alt={name}
-        fill
-        className="object-cover transition-transform duration-700 hover:scale-110"
-      />
-    </div>
-  );
-}
-
-function ProductRow({
-  product,
-  index,
-}: {
-  product: (typeof products)[0];
-  index: number;
-}) {
-  const isImageLeft = product.layout === "image-left";
-
-  if (isImageLeft) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "48px",
-          alignItems: "center",
-          marginBottom: "64px",
-        }}
+      {/* Image Column */}
+      <motion.div 
+        initial={{ opacity: 0, x: isReversed ? 60 : -60 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="w-full lg:w-[40%] flex justify-center"
       >
-        <div style={{ maxWidth: "400px" }}>
-          <ProductImage src={product.imageSrc} name={product.name} />
-        </div>
-        <div>
-          <h2
-            style={{
-              fontSize: "22px",
-              fontWeight: "700",
-              color: "#111",
-              marginBottom: "4px",
-              fontFamily: "Georgia, serif",
-            }}
-          >
-            {product.name}
-          </h2>
-          {product.subtitle && (
-            <p
-              style={{
-                fontSize: "13px",
-                color: "#888",
-                marginBottom: "16px",
-                fontStyle: "italic",
-              }}
-            >
-              ({product.subtitle})
-            </p>
-          )}
-          <p
-            style={{
-              fontSize: "15px",
-              color: "#444",
-              lineHeight: "1.75",
-              maxWidth: "480px",
-            }}
-          >
-            {product.description}
-          </p>
-          <button
-            style={{
-              marginTop: "24px",
-              padding: "10px 28px",
-              background: "#000",
-              color: "#fff",
-              border: "none",
-              borderRadius: "9999px",
-              fontSize: "11px",
-              fontWeight: "700",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-            }}
-          >
-            Shop Now
-          </button>
+        <div className="relative w-full max-w-[400px] aspect-square overflow-hidden rounded-2xl shadow-lg group">
+          <Image
+            src={product.imageSrc}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-1000 group-hover:scale-110"
+          />
         </div>
       </motion.div>
-    );
-  }
 
-  // text-full-image-right: full-width text block above, then image on the right
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      style={{ marginBottom: "64px" }}
-    >
-      {/* Full-width text row */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "48px",
-          alignItems: "center",
-        }}
+      {/* Text Column */}
+      <motion.div 
+        initial={{ opacity: 0, x: isReversed ? -60 : 60 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+        className="w-full lg:flex-1 space-y-4 text-center lg:text-left"
       >
-        <div>
-          <h2
-            style={{
-              fontSize: "22px",
-              fontWeight: "700",
-              color: "#111",
-              marginBottom: "4px",
-              fontFamily: "Georgia, serif",
-            }}
-          >
+        <div className="space-y-1">
+          <h2 className="text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 leading-tight">
             {product.name}
           </h2>
           {product.subtitle && (
-            <p
-              style={{
-                fontSize: "13px",
-                color: "#888",
-                marginBottom: "16px",
-                fontStyle: "italic",
-              }}
-            >
-              ({product.subtitle})
+            <p className="text-sm text-amber-600 font-medium italic tracking-wide">
+              {product.subtitle}
             </p>
           )}
-          <p
-            style={{
-              fontSize: "15px",
-              color: "#444",
-              lineHeight: "1.75",
-            }}
-          >
-            {product.description}
-          </p>
-          <button
-            style={{
-              marginTop: "24px",
-              padding: "10px 28px",
-              background: "#000",
-              color: "#fff",
-              border: "none",
-              borderRadius: "9999px",
-              fontSize: "11px",
-              fontWeight: "700",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-            }}
-          >
-            Shop Now
-          </button>
         </div>
-        <div style={{ maxWidth: "400px", marginLeft: "auto" }}>
-          <ProductImage src={product.imageSrc} name={product.name} />
-        </div>
-      </div>
-    </motion.div>
+
+        <p className="text-base lg:text-lg text-zinc-500 leading-relaxed max-w-lg mx-auto lg:mx-0 font-light">
+          {product.description}
+        </p>
+
+        <button className="mt-4 px-8 py-3.5 bg-zinc-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-amber-600 transition-all duration-500 shadow-md active:scale-95">
+          Shop Now
+        </button>
+      </motion.div>
+    </div>
   );
 }
 
 export default function DiscoverPage() {
   return (
-    <div style={{ minHeight: "100vh", background: "#fff", fontFamily: "Georgia, serif" }}>
-
-      {/* HERO */}
-      <div
-        style={{
-          height: "60vh",
-          minHeight: "400px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
+    <div className="min-h-screen bg-white">
+      {/* Cinematic Hero */}
+      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
         <Image
           src="/hero.jpg"
-          alt="Hero Background"
+          alt="Discovery Hero"
           fill
-          className="object-cover brightness-50"
+          className="object-cover scale-105"
           priority
         />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.1))"
-          }}
-        />
-
+        
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9 }}
-          style={{ position: "relative", zIndex: 1 }}
+          transition={{ duration: 1 }}
+          className="relative z-10 text-center px-6"
         >
-          {/* Nav hint */}
-          <div style={{ marginBottom: "48px" }}>
-            <span
-              style={{
-                color: "rgba(255,255,255,0.7)",
-                fontSize: "13px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-              }}
-            >
-              Macbancy
-            </span>
-          </div>
-
-          <h1
-            style={{
-              fontSize: "clamp(36px, 6vw, 72px)",
-              fontWeight: "700",
-              color: "#fff",
-              fontFamily: "Georgia, serif",
-              fontStyle: "italic",
-              margin: 0,
-              lineHeight: 1.1,
-              textShadow: "0 2px 20px rgba(0,0,0,0.3)",
-            }}
-          >
+          <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-600 mb-4 block">
+            Mac Bancy
+          </span>
+          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none italic">
             Discover Our Scents
           </h1>
         </motion.div>
-      </div>
+      </section>
 
-      {/* PRODUCTS */}
-      <main
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto",
-          padding: "80px 48px",
-        }}
-      >
+      {/* Product Feed */}
+      <main className="max-w-7xl mx-auto px-6 md:px-12 py-24 lg:py-40">
         {products.map((product, index) => (
           <ProductRow key={product.id} product={product} index={index} />
         ))}
       </main>
-
-      {/* FOOTER */}
-      <footer
-        style={{
-          background: "#111",
-          color: "#fff",
-          padding: "60px 48px 32px",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1100px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr 1fr 1fr",
-            gap: "48px",
-            marginBottom: "48px",
-          }}
-        >
-          {/* Brand */}
-          <div>
-            <div
-              style={{
-                fontFamily: "Georgia, serif",
-                fontStyle: "italic",
-                fontSize: "22px",
-                fontWeight: "700",
-                marginBottom: "12px",
-                color: "#fff",
-              }}
-            >
-              Mac&Bancy
-            </div>
-            <p style={{ fontSize: "13px", color: "#888", lineHeight: "1.6", maxWidth: "240px" }}>
-              Bold African Luxury Scent
-            </p>
-          </div>
-
-          {/* About */}
-          <div>
-            <h4
-              style={{
-                fontSize: "13px",
-                fontWeight: "700",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginBottom: "16px",
-                color: "#fff",
-              }}
-            >
-              About
-            </h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {["Shop Now", "Discover", "Contact Us"].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    style={{
-                      fontSize: "13px",
-                      color: "#888",
-                      textDecoration: "none",
-                      transition: "color 0.2s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4
-              style={{
-                fontSize: "13px",
-                fontWeight: "700",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginBottom: "16px",
-                color: "#fff",
-              }}
-            >
-              Contact Us
-            </h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                "Jontare97@gmail.com",
-                "0242250574",
-                "Ghana — West Africa",
-              ].map((item) => (
-                <li key={item}>
-                  <span style={{ fontSize: "13px", color: "#888" }}>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Socials */}
-          <div>
-            <h4
-              style={{
-                fontSize: "13px",
-                fontWeight: "700",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginBottom: "16px",
-                color: "#fff",
-              }}
-            >
-              Socials
-            </h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {["Instagram", "Twitter", "Facebook", "Tiktok", "Snapchat"].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    style={{
-                      fontSize: "13px",
-                      color: "#888",
-                      textDecoration: "none",
-                      transition: "color 0.2s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div
-          style={{
-            maxWidth: "1100px",
-            margin: "0 auto",
-            borderTop: "1px solid #333",
-            paddingTop: "24px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ fontSize: "12px", color: "#666" }}>
-            2025 MacBancy. All rights reserved.
-          </span>
-          <span style={{ fontSize: "12px", color: "#666" }}>
-            @macbancy_perfumes
-          </span>
-        </div>
-      </footer>
     </div>
   );
 }
