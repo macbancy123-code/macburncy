@@ -96,3 +96,26 @@ export const deleteProduct = async (id: string) => {
     throw error;
   }
 };
+// Seed Database (from static products)
+export const seedDatabase = async (initialProducts: any[]) => {
+  try {
+    const existing = await getProducts();
+    if (existing.length > 0) return { success: false, message: "Database already has products" };
+
+    for (const product of initialProducts) {
+      const { id, ...data } = product;
+      await addProduct({
+        ...data,
+        price: Number(data.price.replace(/[^0-9.-]+/g, "")), // Convert "₵700" to 700
+        inStock: true,
+        isPromo: false,
+        category: "Perfume",
+        discoveryText: data.discoveryText || "A signature Mac Bancy fragrance."
+      });
+    }
+    return { success: true, message: "Database seeded successfully" };
+  } catch (error) {
+    console.error("Error seeding database: ", error);
+    throw error;
+  }
+};

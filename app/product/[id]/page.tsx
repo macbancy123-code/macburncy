@@ -59,8 +59,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     <div className="min-h-screen bg-zinc-50">
       {/* Navigation / Breadcrumbs */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8">
-        <Link 
-          href="/shop" 
+        <Link
+          href="/shop"
           className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors"
         >
           <ChevronLeft size={16} />
@@ -72,7 +72,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       <section className="pb-16 lg:pb-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-x-12 gap-y-12 lg:grid-cols-2">
-            
+
             {/* Product Image */}
             <div className="relative aspect-[456/473] w-full overflow-hidden rounded-2xl bg-zinc-100 shadow-xl">
               <Image
@@ -100,7 +100,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-black">
                   {product.name}
                 </h1>
-                <p className="text-xl font-medium text-zinc-500 italic">
+                <p className="text-xl font-medium text-zinc-500 ">
                   {product.description}
                 </p>
               </div>
@@ -112,16 +112,16 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                     {displayPrice}
                   </div>
                   {product.isPromo && (
-                    <span className="text-sm text-zinc-400 line-through mt-1 italic">₵{product.price}</span>
+                    <span className="text-sm text-zinc-400 line-through mt-1 ">₵{product.price}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        size={18} 
-                        className={i < Math.floor(product.rating) ? "fill-black text-black" : "text-zinc-200"} 
+                      <Star
+                        key={i}
+                        size={18}
+                        className={i < Math.floor(product.rating) ? "fill-black text-black" : "text-zinc-200"}
                       />
                     ))}
                   </div>
@@ -172,10 +172,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       {product.discoveryText && (
         <section className="bg-white py-20 lg:py-32">
           <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center">
-              <h2 className="text-3xl font-bold mb-10 text-black">The Story of {product.name}</h2>
-              <div className="text-lg text-zinc-500 leading-relaxed max-w-3xl mx-auto font-light italic">
-                  <p>{product.discoveryText}</p>
-              </div>
+            <h2 className="text-3xl font-bold mb-10 text-black">The Story of {product.name}</h2>
+            <div className="text-lg text-zinc-500 leading-relaxed max-w-3xl mx-auto font-light ">
+              <p>{product.discoveryText}</p>
+            </div>
           </div>
         </section>
       )}
@@ -190,7 +190,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 View All <ArrowRight size={16} />
               </Link>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-x-3 gap-y-12 sm:gap-x-8 lg:grid-cols-3">
               {relatedProducts.map((p) => (
                 <ProductCard key={p.id} {...(p as any)} />

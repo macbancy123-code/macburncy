@@ -14,7 +14,7 @@ export default function Footer() {
                 alt="Mac Bancy" 
                 width={120} 
                 height={50} 
-                className="object-contain brightness-110" 
+                className="object-contain brightness-110 h-auto" 
               />
             </Link>
             <p className="text-sm font-medium tracking-wide text-zinc-100">
@@ -54,7 +54,7 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-6 tracking-tight">Contact Us</h3>
             <div className="space-y-4">
               <p className="text-zinc-400 text-sm font-medium">
-                Jonbam97@gmail.com
+                macbancy123@gmail.com
               </p>
               <p className="text-zinc-400 text-sm font-medium">
                 0242250574

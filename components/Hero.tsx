@@ -20,7 +20,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-2xl text-left">
         <h1 className="text-6xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl leading-[1.1] animate-in fade-in slide-in-from-left-5 duration-1000">
           Bold African <br />
-          Luxury Scents
+          Royal Scents
         </h1>
         <p className="mt-8 max-w-lg text-lg leading-relaxed text-zinc-300 animate-in fade-in slide-in-from-left-7 duration-1000 delay-200">
           A spray that speaks heritage, rich and unforgettable. Experience the essence of African luxury.

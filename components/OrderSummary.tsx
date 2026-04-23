@@ -21,7 +21,7 @@ export default function OrderSummary({ subtotal }: OrderSummaryProps) {
         {/* Details Row */}
         <div className="flex justify-between items-center py-2">
           <span className="text-xl font-medium text-zinc-900">Subtotal:</span>
-          <span className="text-xl font-medium text-zinc-900 italic">To be calculated</span>
+          <span className="text-xl font-medium text-zinc-900 ">To be calculated</span>
         </div>
 
         {/* Total Row */}

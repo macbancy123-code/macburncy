@@ -15,7 +15,7 @@ export default function DiscoverRow({ product, isReversed }: DiscoverRowProps) {
   return (
     <div className={`flex flex-col gap-12 md:gap-24 py-20 md:py-32 border-b border-zinc-50 last:border-0 ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center`}>
       {/* Image Column */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
@@ -34,7 +34,7 @@ export default function DiscoverRow({ product, isReversed }: DiscoverRowProps) {
       </motion.div>
 
       {/* Content Column */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: isReversed ? 30 : -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
@@ -42,29 +42,29 @@ export default function DiscoverRow({ product, isReversed }: DiscoverRowProps) {
         className="w-full md:w-1/2 flex flex-col gap-8 text-center md:text-left items-center md:items-start"
       >
         <div className="flex flex-col gap-4">
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-amber-600">
-                Fragrance Note No. 0{product.id}
-            </span>
-            <h2 className="text-4xl md:text-6xl font-serif text-zinc-900 leading-[1.1]">
-                {product.name}
-            </h2>
-            <p className="text-sm font-light italic text-zinc-400 tracking-wide">
-                {product.description}
-            </p>
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-amber-600">
+            Fragrance Note No. 0{product.id}
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif text-zinc-900 leading-[1.1]">
+            {product.name}
+          </h2>
+          <p className="text-sm font-light  text-zinc-400 tracking-wide">
+            {product.description}
+          </p>
         </div>
-        
+
         <p className="text-lg text-zinc-500 font-light leading-relaxed max-w-lg">
           {product.discoveryText || "An olfactory journey inspired by the rich heritage of the Gold Coast, blending rare botanicals with modern distillation techniques."}
         </p>
 
         <div className="mt-4">
-            <Link 
-                href={`/product/${product.id}`}
-                className="group flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-900 border-b border-zinc-900 pb-2 hover:text-amber-600 hover:border-amber-600 transition-all duration-500"
-            >
-                Explore Scent
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-500" />
-            </Link>
+          <Link
+            href={`/product/${product.id}`}
+            className="group flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-900 border-b border-zinc-900 pb-2 hover:text-amber-600 hover:border-amber-600 transition-all duration-500"
+          >
+            Explore Scent
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-500" />
+          </Link>
         </div>
       </motion.div>
     </div>

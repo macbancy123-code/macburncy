@@ -3,30 +3,34 @@
 export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
-import { 
-  Plus, 
-  Settings, 
-  Package, 
-  Tag, 
-  Eye, 
-  Trash2, 
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import {
+  Plus,
+  Settings,
+  Package,
+  Tag,
+  Eye,
+  Trash2,
   AlertCircle,
   CheckCircle2,
-  XCircle
+  XCircle,
+  LogOut
 } from "lucide-react";
 import { motion } from "motion/react";
-import { getProducts, updateProduct, deleteProduct, ProductData } from "@/lib/firestore";
+import { getProducts, updateProduct, deleteProduct, ProductData, seedDatabase } from "@/lib/firestore";
+import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const [editingProduct, setEditingProduct] = useState<ProductData | null>(null);
+  const router = useRouter();
 
   const fetchProducts = async () => {
     try {
@@ -38,6 +42,29 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const pinVerified = sessionStorage.getItem("admin_pin_verified");
+      
+      if (!user || pinVerified !== "true") {
+        router.push("/admin/login");
+      } else {
+        setCheckingAuth(false);
+        fetchProducts();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+        <p className="text-zinc-400 font-bold uppercase tracking-widest animate-pulse">Verifying Credentials...</p>
+      </div>
+    );
+  }
 
   const toggleStock = async (id: string, currentStatus: boolean) => {
     try {
@@ -61,8 +88,33 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSeed = async () => {
+    if (confirm("This will import the original collection into your live database. Continue?")) {
+      setLoading(true);
+      try {
+        const res = await seedDatabase(STATIC_PRODUCTS);
+        setMessage({ type: res.success ? 'success' : 'error', text: res.message });
+        fetchProducts();
+      } catch (error) {
+        setMessage({ type: 'error', text: 'Failed to seed database' });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      sessionStorage.removeItem("admin_pin_verified");
+      router.push("/admin/login");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-zinc-50 overflow-x-hidden">
       {/* Cinematic Hero */}
       <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
         <Image
@@ -72,7 +124,7 @@ export default function AdminDashboard() {
           className="object-cover scale-105 brightness-[0.7]"
           priority
         />
-        
+
         <div className="absolute inset-0 z-0 bg-black/20"></div>
 
         <motion.div
@@ -84,37 +136,52 @@ export default function AdminDashboard() {
           {/* <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-500 mb-4 block">
             Mac Bancy Atelier
           </span> */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none italic drop-shadow-lg">
+          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none  drop-shadow-lg">
             Management Suite
           </h1>
+          <button 
+            onClick={handleLogout}
+            className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/80 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white/20 transition-all border border-white/10"
+          >
+            <LogOut size={14} />
+            Sign Out
+          </button>
         </motion.div>
       </section>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 -mt-12 relative z-20 pb-20">
-        
+
         {/* Actions Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 bg-white p-8 rounded-3xl border border-zinc-100 shadow-xl">
           <div>
             <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">Collection Inventory</h2>
             <p className="text-sm text-zinc-500">Monitor and refine your luxury scent library.</p>
           </div>
-          <Link 
-            href="/admin/add"
-            className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 rounded-2xl font-bold text-sm hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
-          >
-            <Plus size={20} />
-            Add New Scent
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={handleSeed}
+              disabled={loading}
+              className="inline-flex items-center justify-center gap-2 bg-zinc-100 text-zinc-600 px-8 py-4 rounded-2xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 disabled:opacity-50"
+            >
+              Sync Original Collection
+            </button>
+            <Link
+              href="/admin/add"
+              className="inline-flex items-center justify-center gap-2 bg-black text-white px-8 py-4 rounded-2xl font-bold text-sm hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
+            >
+              <Plus size={20} />
+              Add New Scent
+            </Link>
+          </div>
         </div>
 
         {/* Notifications */}
         {message && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`mb-8 p-4 rounded-xl flex items-center gap-3 border ${
-              message.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-red-50 border-red-100 text-red-700'
-            }`}
+            className={`mb-8 p-4 rounded-xl flex items-center gap-3 border ${message.type === 'success' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-red-50 border-red-100 text-red-700'
+              }`}
           >
             {message.type === 'success' ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
             <span className="text-sm font-medium">{message.text}</span>
@@ -186,13 +253,12 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <button 
+                        <button
                           onClick={() => toggleStock(product.id!, product.inStock)}
-                          className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            product.inStock 
-                              ? 'bg-emerald-50 text-emerald-600' 
-                              : 'bg-red-50 text-red-600'
-                          }`}
+                          className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${product.inStock
+                            ? 'bg-emerald-50 text-emerald-600'
+                            : 'bg-red-50 text-red-600'
+                            }`}
                         >
                           {product.inStock ? 'In Stock' : 'Out of Stock'}
                         </button>
@@ -215,7 +281,7 @@ export default function AdminDashboard() {
                           <button className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
                             <Settings size={18} />
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleDelete(product.id!)}
                             className="p-2 text-zinc-400 hover:text-red-600 transition-colors"
                           >

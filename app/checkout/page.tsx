@@ -21,7 +21,7 @@ export default function CheckoutPage() {
           className="object-cover scale-105"
           priority
         />
-        
+
         <div className="absolute inset-0 z-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -32,7 +32,7 @@ export default function CheckoutPage() {
             <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-600 mb-4 block">
               Mac Bancy
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none italic drop-shadow-lg">
+            <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none  drop-shadow-lg">
               Your Shopping Bag
             </h1>
           </motion.div>

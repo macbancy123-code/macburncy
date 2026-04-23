@@ -7,6 +7,8 @@ import { motion } from "motion/react";
 import { ChevronLeft, Save, Upload, Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { addProduct } from "@/lib/firestore";
 import { uploadToCloudinary } from "@/lib/cloudinary-upload";
 import Image from "next/image";
@@ -14,8 +16,31 @@ import Image from "next/image";
 export default function AddProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const pinVerified = sessionStorage.getItem("admin_pin_verified");
+      
+      if (!user || pinVerified !== "true") {
+        router.push("/admin/login");
+      } else {
+        setCheckingAuth(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+        <p className="text-zinc-400 font-bold uppercase tracking-widest animate-pulse">Verifying Credentials...</p>
+      </div>
+    );
+  }
 
   const [formData, setFormData] = useState({
     name: "",

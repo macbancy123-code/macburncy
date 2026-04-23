@@ -5,13 +5,12 @@ service cloud.firestore {
     
     // Products Collection
     match /products/{productId} {
-      // Allow everyone to view products
+      // Allow everyone to view products (Public)
       allow read: if true;
       
-      // Allow write access (Create, Update, Delete) 
-      // For now, allowing all writes while in development. 
-      // In production, you should restrict this to authenticated admins only.
-      allow write: if true;
+      // ONLY allow authenticated admins to modify the inventory
+      // request.auth != null ensures the user is logged in via Firebase Auth
+      allow write: if request.auth != null;
     }
     
     // Contact Submissions (if added later)

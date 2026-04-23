@@ -28,11 +28,11 @@ export default function ProductSection() {
     const totalSteps = PRODUCTS.length - itemsPerPage + 1;
     let start = Math.max(0, startIndex - 1);
     let end = Math.min(totalSteps - 1, start + 2);
-    
+
     if (end === totalSteps - 1) {
       start = Math.max(0, end - 2);
     }
-    
+
     return Array.from({ length: Math.min(totalSteps, (end - start) + 1) }, (_, i) => start + i);
   };
 
@@ -52,12 +52,12 @@ export default function ProductSection() {
         </div>
 
         {/* Product Grid - Using a key to trigger animations on slide */}
-        <div 
+        <div
           key={startIndex}
           className="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-3 min-h-[400px]"
         >
           {visibleProducts.map((product, index) => (
-            <div 
+            <div
               key={product.id}
               className="animate-in fade-in slide-in-from-right-4 duration-500 ease-out"
               style={{ animationDelay: `${index * 50}ms` }}
@@ -69,43 +69,40 @@ export default function ProductSection() {
 
         {/* Pagination - Simplified Sliding Controls */}
         <div className="mt-20 flex items-center justify-center gap-4 sm:gap-10">
-          <button 
+          <button
             onClick={slidePrev}
             disabled={startIndex === 0}
-            className={`flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all ${
-              startIndex === 0 
-                ? "opacity-20 cursor-not-allowed text-zinc-400" 
-                : "text-black hover:opacity-70 cursor-pointer"
-            }`}
+            className={`flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all ${startIndex === 0
+              ? "opacity-20 cursor-not-allowed text-zinc-400"
+              : "text-black hover:opacity-70 cursor-pointer"
+              }`}
           >
             <ChevronLeft size={16} className="sm:w-5 sm:h-5" />
             <span>Previous</span>
           </button>
-          
+
           <div className="flex gap-1.5 sm:gap-3">
             {getVisiblePages().map((index) => (
               <button
                 key={index}
                 onClick={() => setStartIndex(index)}
-                className={`flex h-10 min-w-[3.5rem] sm:h-12 sm:min-w-[4.5rem] px-4 sm:px-6 items-center justify-center rounded-lg transition-all text-xs sm:text-sm font-bold ${
-                  startIndex === index 
-                    ? "bg-black text-white shadow-md" 
-                    : "bg-zinc-100 text-zinc-400 hover:bg-zinc-200 hover:text-black"
-                }`}
+                className={`flex h-10 min-w-[3.5rem] sm:h-12 sm:min-w-[4.5rem] px-4 sm:px-6 items-center justify-center rounded-lg transition-all text-xs sm:text-sm font-bold ${startIndex === index
+                  ? "bg-black text-white shadow-md"
+                  : "bg-zinc-100 text-zinc-400 hover:bg-zinc-200 hover:text-black"
+                  }`}
               >
                 {index + 1}
               </button>
             ))}
           </div>
 
-          <button 
+          <button
             onClick={slideNext}
             disabled={startIndex >= maxIndex}
-            className={`flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all ${
-              startIndex >= maxIndex 
-                ? "opacity-20 cursor-not-allowed text-zinc-400" 
-                : "text-black hover:opacity-70 cursor-pointer"
-            }`}
+            className={`flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all ${startIndex >= maxIndex
+              ? "opacity-20 cursor-not-allowed text-zinc-400"
+              : "text-black hover:opacity-70 cursor-pointer"
+              }`}
           >
             <span>Next</span>
             <ChevronRight size={16} className="sm:w-5 sm:h-5" />

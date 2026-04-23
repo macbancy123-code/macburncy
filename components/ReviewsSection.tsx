@@ -42,16 +42,16 @@ export default function ReviewsSection() {
               {/* Stars */}
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    size={14} 
-                    className={i < review.rating ? "fill-black text-black" : "text-zinc-300"} 
+                  <Star
+                    key={i}
+                    size={14}
+                    className={i < review.rating ? "fill-black text-black" : "text-zinc-300"}
                   />
                 ))}
               </div>
 
               {/* Review Text */}
-              <p className="text-base leading-relaxed text-zinc-900 font-medium italic ">
+              <p className="text-base leading-relaxed text-zinc-900 font-medium  ">
                 "{review.text}"
               </p>
 

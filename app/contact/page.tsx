@@ -1,9 +1,41 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Mail, Phone, MapPin, Send, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "General Collection",
+    message: ""
+  });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: "", email: "", subject: "General Collection", message: "" });
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Spacer for fixed navbar */}
@@ -24,10 +56,10 @@ export default function ContactPage() {
                 <div className="h-1 w-12 bg-zinc-900"></div>
                 <div className="h-1 w-3 bg-zinc-200"></div>
               </div>
-              
+
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-zinc-900">
                 Contact <br />
-                <span className="italic font-light text-zinc-400">The Atelier</span>
+                <span className=" font-light text-zinc-400">The Atelier</span>
               </h1>
               <p className="text-lg text-zinc-500 font-light leading-relaxed max-w-md">
                 Whether you&apos;re seeking a signature scent or have inquiries
@@ -39,7 +71,7 @@ export default function ContactPage() {
             <div className="space-y-10">
               {/* Contact Items */}
               {[
-                { icon: Mail, label: 'Email Us', value: 'concierge@macbancy.com' },
+                { icon: Mail, label: 'Email Us', value: 'macbancy123@gmail.com' },
                 { icon: Phone, label: 'Inquiry Line', value: '+233 (0) 24 225 0574' },
                 { icon: MapPin, label: 'Main Atelier', value: 'Ghana — West Africa' }
               ].map((item, idx) => (
@@ -67,68 +99,111 @@ export default function ContactPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-zinc-50/50 rounded-[2.5rem] p-10 md:p-16 border border-zinc-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)]"
           >
-            <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-3">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none focus:border-amber-600 transition-all shadow-sm"
-                    placeholder="Enter name..."
-                  />
+            {status === 'success' ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-20 space-y-6"
+              >
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-50 text-emerald-500 mb-4">
+                  <CheckCircle2 size={40} />
                 </div>
-                <div className="space-y-3">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none focus:border-amber-600 transition-all shadow-sm"
-                    placeholder="email@example.com"
-                  />
-                </div>
-              </div>
+                <h2 className="text-3xl font-bold text-zinc-900">Message Received</h2>
+                <p className="text-zinc-500 font-light">Thank you for reaching out. Our consultants will <br /> respond to your inquiry shortly.</p>
+                <button 
+                  onClick={() => setStatus('idle')}
+                  className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-900 border-b border-zinc-900 pb-1 hover:text-amber-600 hover:border-amber-600 transition-all"
+                >
+                  Send another inquiry
+                </button>
+              </motion.div>
+            ) : (
+              <form className="space-y-8" onSubmit={handleSubmit}>
+                {status === 'error' && (
+                  <div className="p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl flex items-center gap-3 text-sm font-medium">
+                    <AlertCircle size={18} />
+                    Failed to send message. Please try again.
+                  </div>
+                )}
 
-              <div className="space-y-3">
-                <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
-                  Nature of Inquiry
-                </label>
-                <div className="relative">
-                  <select
-                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none appearance-none cursor-pointer focus:border-amber-600 transition-all shadow-sm"
-                  >
-                    <option>General Collection</option>
-                    <option>Custom Formulation</option>
-                    <option>Wholesale & Distribution</option>
-                    <option>Press & Media</option>
-                  </select>
-                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
-                    <ArrowRight size={16} className="rotate-90" />
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
+                      Your Name
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none focus:border-amber-600 transition-all shadow-sm"
+                      placeholder="Enter name..."
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
+                      Email Address
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none focus:border-amber-600 transition-all shadow-sm"
+                      placeholder="email@example.com"
+                    />
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-3">
-                <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
-                  Your Message
-                </label>
-                <textarea
-                  rows={6}
-                  className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none resize-none focus:border-amber-600 transition-all shadow-sm"
-                  placeholder="How can we assist you?"
-                />
-              </div>
+                <div className="space-y-3">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
+                    Nature of Inquiry
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.subject}
+                      onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                      className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none appearance-none cursor-pointer focus:border-amber-600 transition-all shadow-sm"
+                    >
+                      <option>General Collection</option>
+                      <option>Custom Formulation</option>
+                      <option>Wholesale & Distribution</option>
+                      <option>Press & Media</option>
+                    </select>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                      <ArrowRight size={16} className="rotate-90" />
+                    </div>
+                  </div>
+                </div>
 
-              <button
-                type="submit"
-                className="w-full bg-zinc-900 text-white rounded-full py-6 text-[10px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-4 group hover:bg-amber-600 transition-all duration-500 shadow-xl"
-              >
-                Send Message
-                <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </button>
-            </form>
+                <div className="space-y-3">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 px-1">
+                    Your Message
+                  </label>
+                  <textarea
+                    required
+                    rows={6}
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    className="w-full bg-white border border-zinc-100 rounded-2xl px-6 py-5 text-sm outline-none resize-none focus:border-amber-600 transition-all shadow-sm"
+                    placeholder="How can we assist you?"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="w-full bg-zinc-900 text-white rounded-full py-6 text-[10px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-4 group hover:bg-amber-600 transition-all duration-500 shadow-xl disabled:opacity-50"
+                >
+                  {status === 'loading' ? 'Sending Inquiry...' : (
+                    <>
+                      Send Message
+                      <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
           </motion.div>
         </div>
       </main>

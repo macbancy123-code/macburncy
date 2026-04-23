@@ -16,18 +16,18 @@ interface ProductCardProps {
   promoPrice?: number;
 }
 
-export default function ProductCard({ 
-  id, 
-  name, 
-  description, 
-  price, 
-  rating, 
+export default function ProductCard({
+  id,
+  name,
+  description,
+  price,
+  rating,
   imageSrc,
   inStock = true,
   isPromo = false,
   promoPrice
 }: ProductCardProps) {
-  
+
   const displayPrice = isPromo && promoPrice ? `₵${promoPrice}` : (typeof price === 'number' ? `₵${price}` : price);
   const originalPrice = typeof price === 'number' ? `₵${price}` : price;
 
@@ -43,7 +43,7 @@ export default function ProductCard({
             fill
             className={`object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${!inStock ? 'grayscale' : ''}`}
           />
-          
+
           {/* Status Badges */}
           <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
             {!inStock && (
@@ -74,7 +74,7 @@ export default function ProductCard({
             {name}
           </h3>
         </Link>
-        <p className="text-[0.7rem] sm:text-xs font-medium text-zinc-500 leading-tight line-clamp-1 italic">
+        <p className="text-[0.7rem] sm:text-xs font-medium text-zinc-500 leading-tight line-clamp-1 ">
           {description}
         </p>
 
@@ -82,11 +82,10 @@ export default function ProductCard({
           <div className="flex flex-col">
             <Link
               href={`/product/${id}`}
-              className={`inline-flex items-center justify-center rounded-xl px-5 py-2 sm:px-7 sm:py-2.5 text-[0.7rem] sm:text-sm font-bold transition-all duration-300 active:scale-95 whitespace-nowrap ${
-                !inStock 
-                  ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed' 
+              className={`inline-flex items-center justify-center rounded-xl px-5 py-2 sm:px-7 sm:py-2.5 text-[0.7rem] sm:text-sm font-bold transition-all duration-300 active:scale-95 whitespace-nowrap ${!inStock
+                  ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                   : 'bg-black text-white hover:bg-zinc-800 hover:shadow-xl hover:shadow-black/10'
-              }`}
+                }`}
             >
               {inStock ? displayPrice : "Unavailable"}
             </Link>
@@ -94,7 +93,7 @@ export default function ProductCard({
               <span className="text-[10px] text-zinc-400 line-through mt-1 ml-1">{originalPrice}</span>
             )}
           </div>
-          
+
           <Link href={`/product/${id}`} className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors hidden sm:block">
             Details
           </Link>

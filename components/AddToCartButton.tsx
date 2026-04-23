@@ -6,9 +6,9 @@ import { useCart, CartItem } from "@/context/CartContext";
 
 interface AddToCartButtonProps {
   product: {
-    id: number;
+    id: string | number;
     name: string;
-    price: string;
+    price: string | number;
     description: string;
     imageSrc: string;
   };
@@ -18,14 +18,18 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
 
-  const priceValue = parseInt(product.price.replace(/[^\d]/g, ""));
+  // Safely get numeric price from string ("₵700") or number (700)
+  const getPriceValue = () => {
+    if (typeof product.price === 'number') return product.price;
+    return parseInt(product.price.replace(/[^\d]/g, "")) || 0;
+  };
 
   const handleAddToCart = () => {
     const item: CartItem = {
       id: product.id,
       name: product.name,
       variant: product.description,
-      pricePerUnit: priceValue,
+      pricePerUnit: getPriceValue(),
       quantity: 1,
       imageSrc: product.imageSrc,
     };

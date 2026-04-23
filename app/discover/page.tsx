@@ -137,12 +137,11 @@ function ProductRow({ product, index }: { product: typeof products[0]; index: nu
 
   return (
     <div
-      className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-20 mb-16 lg:mb-24 ${
-        isReversed ? "lg:flex-row-reverse" : ""
-      }`}
+      className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-20 mb-16 lg:mb-24 ${isReversed ? "lg:flex-row-reverse" : ""
+        }`}
     >
       {/* Image Column */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: isReversed ? 60 : -60 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -160,7 +159,7 @@ function ProductRow({ product, index }: { product: typeof products[0]; index: nu
       </motion.div>
 
       {/* Text Column */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: isReversed ? -60 : 60 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -172,7 +171,7 @@ function ProductRow({ product, index }: { product: typeof products[0]; index: nu
             {product.name}
           </h2>
           {product.subtitle && (
-            <p className="text-sm text-amber-600 font-medium italic tracking-wide">
+            <p className="text-sm text-amber-600 font-medium  tracking-wide">
               {product.subtitle}
             </p>
           )}
@@ -202,7 +201,7 @@ export default function DiscoverPage() {
           className="object-cover scale-105"
           priority
         />
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -212,7 +211,7 @@ export default function DiscoverPage() {
           <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-600 mb-4 block">
             Mac Bancy
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none italic">
+          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none ">
             Discover Our Scents
           </h1>
         </motion.div>
