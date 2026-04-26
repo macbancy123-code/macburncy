@@ -16,10 +16,18 @@ import {
   CheckCircle2,
   XCircle,
   LogOut,
-  Loader2
+  Loader2,
+  GripVertical
 } from "lucide-react";
-import { motion } from "motion/react";
-import { getProducts, updateProduct, deleteProduct, ProductData, seedDatabase } from "@/lib/firestore";
+import { motion, Reorder } from "motion/react";
+import { 
+  getProducts, 
+  updateProduct, 
+  deleteProduct, 
+  ProductData, 
+  seedDatabase,
+  updateProductsOrder 
+} from "@/lib/firestore";
 import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 import Image from "next/image";
 import Link from "next/link";
@@ -110,6 +118,20 @@ export default function AdminDashboard() {
       router.push("/admin/login");
     } catch (error) {
       console.error("Logout failed", error);
+    }
+  };
+
+  const handleReorder = async (newOrder: ProductData[]) => {
+    setProducts(newOrder);
+    try {
+      const orderUpdates = newOrder.map((p, index) => ({
+        id: p.id!,
+        order: index
+      }));
+      await updateProductsOrder(orderUpdates);
+    } catch (error) {
+      console.error("Failed to save new order:", error);
+      setMessage({ type: 'error', text: 'Failed to save arrangement' });
     }
   };
 
@@ -230,16 +252,30 @@ export default function AdminDashboard() {
                   <th className="px-6 py-5 text-xs font-bold uppercase tracking-widest text-zinc-400 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-50">
+              <Reorder.Group 
+                as="tbody" 
+                axis="y" 
+                values={products} 
+                onReorder={handleReorder}
+                className="divide-y divide-zinc-50"
+              >
                 {loading ? (
                   <tr><td colSpan={5} className="px-6 py-20 text-center text-zinc-400">Loading inventory...</td></tr>
                 ) : products.length === 0 ? (
                   <tr><td colSpan={5} className="px-6 py-20 text-center text-zinc-400">No products found. Add your first scent!</td></tr>
                 ) : (
                   products.map((product) => (
-                    <tr key={product.id} className="hover:bg-zinc-50/50 transition-colors">
+                    <Reorder.Item 
+                      key={product.id} 
+                      value={product}
+                      as="tr"
+                      className="hover:bg-zinc-50/50 transition-colors cursor-default bg-white"
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
+                          <div className="text-zinc-300 cursor-grab active:cursor-grabbing hover:text-zinc-600 transition-colors">
+                            <GripVertical size={20} />
+                          </div>
                           <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-zinc-100 border border-zinc-200">
                             <Image src={product.imageSrc} alt={product.name} fill className="object-cover" />
                           </div>
@@ -296,10 +332,10 @@ export default function AdminDashboard() {
                           </button>
                         </div>
                       </td>
-                    </tr>
+                    </Reorder.Item>
                   ))
                 )}
-              </tbody>
+              </Reorder.Group>
             </table>
           </div>
         </div>

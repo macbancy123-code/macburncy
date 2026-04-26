@@ -51,7 +51,7 @@ export default function ShopPage() {
           </div>
         ) : (
           /* Product Grid — 2 cols on mobile, 3 on lg, 4 on xl */
-          <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-3 xl:grid-cols-4 pb-20">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-3 pb-20">
             {products.map((product) => (
               <ProductCard key={product.id} {...(product as any)} />
             ))}

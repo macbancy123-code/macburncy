@@ -56,9 +56,6 @@ function ProductRow({ product, index }: { product: ProductData; index: number })
           {product.discoveryText || product.description}
         </p>
 
-        <button className="mt-4 px-8 py-3.5 bg-zinc-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-amber-600 transition-all duration-500 shadow-md active:scale-95">
-          Shop Now
-        </button>
       </motion.div>
     </div>
   );

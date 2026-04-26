@@ -57,15 +57,6 @@ export default function DiscoverRow({ product, isReversed }: DiscoverRowProps) {
           {product.discoveryText || "An olfactory journey inspired by the rich heritage of the Gold Coast, blending rare botanicals with modern distillation techniques."}
         </p>
 
-        <div className="mt-4">
-          <Link
-            href={`/product/${product.id}`}
-            className="group flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-900 border-b border-zinc-900 pb-2 hover:text-amber-600 hover:border-amber-600 transition-all duration-500"
-          >
-            Explore Scent
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-500" />
-          </Link>
-        </div>
       </motion.div>
     </div>
   );

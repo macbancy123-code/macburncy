@@ -29,6 +29,7 @@ export interface ProductData {
   promoPrice?: number;
   createdAt?: any;
   imageStoragePath?: string; // Track storage path for cleanup
+  order?: number; // For manual arrangement
 }
 
 const PRODUCTS_COLLECTION = "products";
@@ -50,15 +51,41 @@ export const addProduct = async (product: Omit<ProductData, "id" | "createdAt">)
 // Get all products
 export const getProducts = async () => {
   try {
-    const q = query(collection(db, PRODUCTS_COLLECTION), orderBy("createdAt", "desc"));
+    // We order by 'order' first, then 'createdAt'
+    // Note: If 'order' doesn't exist, we might need a composite index or handle it in JS
+    // For now, we'll try ordering by order and fallback in JS if needed
+    const q = query(collection(db, PRODUCTS_COLLECTION), orderBy("order", "asc"));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    
+    let products = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     })) as ProductData[];
+
+    // If order is missing, sort those by createdAt at the end
+    if (products.length === 0) {
+      const qFallback = query(collection(db, PRODUCTS_COLLECTION), orderBy("createdAt", "desc"));
+      const fallbackSnapshot = await getDocs(qFallback);
+      products = fallbackSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as ProductData[];
+    }
+
+    return products;
   } catch (error) {
     console.error("Error getting products: ", error);
-    throw error;
+    // If the index is missing, fallback to simple createdAt sort
+    try {
+      const qFallback = query(collection(db, PRODUCTS_COLLECTION), orderBy("createdAt", "desc"));
+      const fallbackSnapshot = await getDocs(qFallback);
+      return fallbackSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as ProductData[];
+    } catch (e) {
+      throw error;
+    }
   }
 };
 
@@ -84,6 +111,21 @@ export const updateProduct = async (id: string, updates: Partial<ProductData>) =
     await updateDoc(docRef, updates);
   } catch (error) {
     console.error("Error updating product: ", error);
+    throw error;
+  }
+};
+
+// Update multiple product orders
+export const updateProductsOrder = async (products: { id: string, order: number }[]) => {
+  try {
+    // We can't do a real batch easily with the current setup, but we can do parallel updates
+    const promises = products.map(p => {
+      const docRef = doc(db, PRODUCTS_COLLECTION, p.id);
+      return updateDoc(docRef, { order: p.order });
+    });
+    await Promise.all(promises);
+  } catch (error) {
+    console.error("Error updating products order: ", error);
     throw error;
   }
 };
@@ -135,7 +177,8 @@ export const seedDatabase = async (initialProducts: any[]) => {
         inStock: true,
         isPromo: false,
         category: "Perfume",
-        discoveryText: data.discoveryText || "A signature Mac Bancy fragrance."
+        discoveryText: data.discoveryText || "A signature Mac Bancy fragrance.",
+        order: count + existing.length // Set an initial order
       });
       count++;
     }

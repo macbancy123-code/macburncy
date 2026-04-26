@@ -93,10 +93,6 @@ export default function ProductCard({
               <span className="text-[10px] text-zinc-400 line-through mt-1 ml-1">{originalPrice}</span>
             )}
           </div>
-
-          <Link href={`/product/${id}`} className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors hidden sm:block">
-            Details
-          </Link>
         </div>
       </div>
     </div>
