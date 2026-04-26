@@ -136,6 +136,30 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+    
+    setLoading(true);
+    try {
+      await updateProduct(editingProduct.id!, {
+        name: editingProduct.name,
+        description: editingProduct.description,
+        price: Number(editingProduct.price),
+        promoPrice: editingProduct.isPromo ? Number(editingProduct.promoPrice) : 0,
+        isPromo: editingProduct.isPromo,
+        inStock: editingProduct.inStock
+      });
+      setMessage({ type: 'success', text: 'Product updated successfully' });
+      setEditingProduct(null);
+      fetchProducts();
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to update product' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-50 overflow-x-hidden">
       {/* Cinematic Hero */}
@@ -322,7 +346,10 @@ export default function AdminDashboard() {
                           <Link href={`/product/${product.id}`} className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
                             <Eye size={18} />
                           </Link>
-                          <button className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
+                          <button 
+                            onClick={() => setEditingProduct(product)}
+                            className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors"
+                          >
                             <Settings size={18} />
                           </button>
                           <button
@@ -341,6 +368,119 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+      
+      {/* Edit Modal */}
+      {editingProduct && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setEditingProduct(null)}
+          />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden"
+          >
+            <div className="p-8 border-b border-zinc-100 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-zinc-900">Edit Scent</h2>
+              <button onClick={() => setEditingProduct(null)} className="p-2 hover:bg-zinc-100 rounded-full transition-colors">
+                <Plus className="rotate-45" size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Product Name</label>
+                    <input 
+                      type="text" 
+                      value={editingProduct.name}
+                      onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
+                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Collection / Short Desc</label>
+                    <input 
+                      type="text" 
+                      value={editingProduct.description}
+                      onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
+                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Base Price (₵)</label>
+                    <input 
+                      type="number" 
+                      value={editingProduct.price}
+                      onChange={(e) => setEditingProduct({...editingProduct, price: e.target.value as any})}
+                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Promo Price (₵)</label>
+                    <input 
+                      type="number" 
+                      disabled={!editingProduct.isPromo}
+                      value={editingProduct.promoPrice || ''}
+                      onChange={(e) => setEditingProduct({...editingProduct, promoPrice: e.target.value as any})}
+                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none disabled:opacity-30"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-zinc-100">
+                <div className="flex gap-8">
+                  <div className="flex items-center gap-3">
+                    <button 
+                      type="button"
+                      onClick={() => setEditingProduct({...editingProduct, isPromo: !editingProduct.isPromo})}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${editingProduct.isPromo ? 'bg-emerald-500' : 'bg-zinc-200'}`}
+                    >
+                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${editingProduct.isPromo ? 'translate-x-6' : 'translate-x-1'}`} />
+                    </button>
+                    <span className="text-xs font-bold text-zinc-900 uppercase tracking-wider">Promo</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button 
+                      type="button"
+                      onClick={() => setEditingProduct({...editingProduct, inStock: !editingProduct.inStock})}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${editingProduct.inStock ? 'bg-emerald-500' : 'bg-zinc-200'}`}
+                    >
+                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${editingProduct.inStock ? 'translate-x-6' : 'translate-x-1'}`} />
+                    </button>
+                    <span className="text-xs font-bold text-zinc-900 uppercase tracking-wider">In Stock</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setEditingProduct(null)}
+                    className="px-6 py-3 rounded-xl font-bold text-sm text-zinc-500 hover:bg-zinc-50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    disabled={loading}
+                    className="bg-black text-white px-10 py-3 rounded-xl font-bold text-sm hover:bg-zinc-800 transition-all shadow-lg shadow-black/10 active:scale-95 disabled:opacity-50"
+                  >
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

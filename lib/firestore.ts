@@ -51,10 +51,9 @@ export const addProduct = async (product: Omit<ProductData, "id" | "createdAt">)
 // Get all products
 export const getProducts = async () => {
   try {
-    // We order by 'order' first, then 'createdAt'
-    // Note: If 'order' doesn't exist, we might need a composite index or handle it in JS
-    // For now, we'll try ordering by order and fallback in JS if needed
-    const q = query(collection(db, PRODUCTS_COLLECTION), orderBy("order", "asc"));
+    // We fetch all products and sort them in JS to avoid excluding products
+    // that don't have an 'order' field yet (Firestore filters them out if we orderBy)
+    const q = query(collection(db, PRODUCTS_COLLECTION));
     const querySnapshot = await getDocs(q);
     
     let products = querySnapshot.docs.map(doc => ({
@@ -62,30 +61,25 @@ export const getProducts = async () => {
       ...doc.data()
     })) as ProductData[];
 
-    // If order is missing, sort those by createdAt at the end
-    if (products.length === 0) {
-      const qFallback = query(collection(db, PRODUCTS_COLLECTION), orderBy("createdAt", "desc"));
-      const fallbackSnapshot = await getDocs(qFallback);
-      products = fallbackSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as ProductData[];
-    }
+    // Sort by order first, then fallback to createdAt
+    products.sort((a, b) => {
+      const orderA = a.order ?? Number.MAX_SAFE_INTEGER;
+      const orderB = b.order ?? Number.MAX_SAFE_INTEGER;
+      
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      
+      // Fallback to createdAt if order is the same or missing
+      const dateA = a.createdAt?.toDate?.() || new Date(0);
+      const dateB = b.createdAt?.toDate?.() || new Date(0);
+      return dateB - dateA;
+    });
 
     return products;
   } catch (error) {
     console.error("Error getting products: ", error);
-    // If the index is missing, fallback to simple createdAt sort
-    try {
-      const qFallback = query(collection(db, PRODUCTS_COLLECTION), orderBy("createdAt", "desc"));
-      const fallbackSnapshot = await getDocs(qFallback);
-      return fallbackSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as ProductData[];
-    } catch (e) {
-      throw error;
-    }
+    throw error;
   }
 };
 
