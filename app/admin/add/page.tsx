@@ -1,6 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -12,6 +11,7 @@ import { auth } from "@/lib/firebase";
 import { addProduct } from "@/lib/firestore";
 import { uploadToCloudinary } from "@/lib/cloudinary-upload";
 import Image from "next/image";
+import { useEffect } from "react";
 
 export default function AddProductPage() {
   const router = useRouter();
@@ -34,6 +34,25 @@ export default function AddProductPage() {
     return () => unsubscribe();
   }, [router]);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "" as any,
+    rating: 5.0,
+    imageSrc: "",
+    category: "Perfume",
+    inStock: true,
+    isPromo: false,
+    promoPrice: "" as any,
+  });
+
+  // Mock notes for now
+  const [notes, setNotes] = useState({
+    top: ["Bergamot", "Saffron"],
+    heart: ["Rose", "Incense"],
+    base: ["Amber", "Oud"]
+  });
+
   if (checkingAuth) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
@@ -41,19 +60,6 @@ export default function AddProductPage() {
       </div>
     );
   }
-
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: 0,
-    rating: 5.0,
-    imageSrc: "",
-    category: "Perfume",
-    discoveryText: "",
-    inStock: true,
-    isPromo: false,
-    promoPrice: 0,
-  });
 
   // Handle Image Upload
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,12 +78,6 @@ export default function AddProductPage() {
     }
   };
 
-  // Mock notes for now
-  const [notes, setNotes] = useState({
-    top: ["Bergamot", "Saffron"],
-    heart: ["Rose", "Incense"],
-    base: ["Amber", "Oud"]
-  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,6 +91,8 @@ export default function AddProductPage() {
 
       await addProduct({
         ...formData,
+        price: Number(formData.price),
+        promoPrice: formData.isPromo ? Number(formData.promoPrice) : 0,
         notes: notes as any
       } as any);
       
@@ -165,16 +167,6 @@ export default function AddProductPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2 ml-1">The Story (Long Description)</label>
-                  <textarea 
-                    rows={4}
-                    value={formData.discoveryText}
-                    onChange={(e) => setFormData({...formData, discoveryText: e.target.value})}
-                    placeholder="Tell the story of this scent..."
-                    className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none resize-none"
-                  />
-                </div>
               </div>
             </div>
 
@@ -189,7 +181,7 @@ export default function AddProductPage() {
                     required
                     type="number" 
                     value={formData.price}
-                    onChange={(e) => setFormData({...formData, price: Number(e.target.value)})}
+                    onChange={(e) => setFormData({...formData, price: e.target.value})}
                     className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none"
                   />
                 </div>
@@ -200,7 +192,7 @@ export default function AddProductPage() {
                     type="number" 
                     disabled={!formData.isPromo}
                     value={formData.promoPrice}
-                    onChange={(e) => setFormData({...formData, promoPrice: Number(e.target.value)})}
+                    onChange={(e) => setFormData({...formData, promoPrice: e.target.value})}
                     className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none disabled:opacity-30"
                   />
                 </div>

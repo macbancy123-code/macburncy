@@ -1,6 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -16,7 +15,8 @@ import {
   AlertCircle,
   CheckCircle2,
   XCircle,
-  LogOut
+  LogOut,
+  Loader2
 } from "lucide-react";
 import { motion } from "motion/react";
 import { getProducts, updateProduct, deleteProduct, ProductData, seedDatabase } from "@/lib/firestore";
@@ -161,9 +161,16 @@ export default function AdminDashboard() {
             <button
               onClick={handleSeed}
               disabled={loading}
-              className="inline-flex items-center justify-center gap-2 bg-zinc-100 text-zinc-600 px-8 py-4 rounded-2xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 bg-zinc-100 text-zinc-600 px-8 py-4 rounded-2xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 disabled:opacity-50 min-w-[220px]"
             >
-              Sync Original Collection
+              {loading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Syncing Collection...
+                </>
+              ) : (
+                "Sync Original Collection"
+              )}
             </button>
             <Link
               href="/admin/add"

@@ -12,6 +12,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { db } from "./firebase";
+import { uploadToCloudinary } from "./cloudinary-upload";
 
 export interface ProductData {
   id?: string;
@@ -27,6 +28,7 @@ export interface ProductData {
   isPromo: boolean;
   promoPrice?: number;
   createdAt?: any;
+  imageStoragePath?: string; // Track storage path for cleanup
 }
 
 const PRODUCTS_COLLECTION = "products";
@@ -100,20 +102,48 @@ export const deleteProduct = async (id: string) => {
 export const seedDatabase = async (initialProducts: any[]) => {
   try {
     const existing = await getProducts();
-    if (existing.length > 0) return { success: false, message: "Database already has products" };
+    // Allow seeding if database is empty or if user wants to re-sync
+    // For simplicity, we'll just add new ones or skip if names match
+    const existingNames = new Set(existing.map(p => p.name + p.description));
 
+    let count = 0;
     for (const product of initialProducts) {
+      if (existingNames.has(product.name + product.description)) continue;
+
       const { id, ...data } = product;
+      
+      let finalImageSrc = data.imageSrc;
+
+      // Upload image to Cloudinary if it's a local path
+      if (data.imageSrc.startsWith("/")) {
+        try {
+          const response = await fetch(data.imageSrc);
+          const blob = await response.blob();
+          // Convert blob to File object for the upload function if necessary, 
+          // but FormData handles Blobs too.
+          finalImageSrc = await uploadToCloudinary(blob as any);
+        } catch (uploadError) {
+          console.error(`Failed to upload image to Cloudinary for ${product.name}:`, uploadError);
+          // Fallback to original path if upload fails
+        }
+      }
+
       await addProduct({
         ...data,
-        price: Number(data.price.replace(/[^0-9.-]+/g, "")), // Convert "₵700" to 700
+        imageSrc: finalImageSrc,
+        price: typeof data.price === 'string' ? Number(data.price.replace(/[^0-9.-]+/g, "")) : data.price,
         inStock: true,
         isPromo: false,
         category: "Perfume",
         discoveryText: data.discoveryText || "A signature Mac Bancy fragrance."
       });
+      count++;
     }
-    return { success: true, message: "Database seeded successfully" };
+    
+    return { 
+      success: true, 
+      message: count > 0 ? `Seeded ${count} new products with images.` : "No new products to seed." 
+    };
   } catch (error) {
     console.error("Error seeding database: ", error);
     throw error;
