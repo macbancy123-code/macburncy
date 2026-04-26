@@ -31,6 +31,7 @@ import {
 import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -288,10 +289,10 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
                           <span className={`font-bold ${product.isPromo ? 'text-emerald-600' : 'text-zinc-900'}`}>
-                            ₵{product.isPromo ? product.promoPrice : product.price}
+                            ₵{formatPrice(product.isPromo ? product.promoPrice! : product.price)}
                           </span>
                           {product.isPromo && (
-                            <span className="text-[10px] text-zinc-400 line-through">₵{product.price}</span>
+                            <span className="text-[10px] text-zinc-400 line-through">₵{formatPrice(product.price)}</span>
                           )}
                         </div>
                       </td>

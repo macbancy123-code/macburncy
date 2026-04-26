@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Star, Tag } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   id: string | number;
@@ -28,8 +29,8 @@ export default function ProductCard({
   promoPrice
 }: ProductCardProps) {
 
-  const displayPrice = isPromo && promoPrice ? `₵${promoPrice}` : (typeof price === 'number' ? `₵${price}` : price);
-  const originalPrice = typeof price === 'number' ? `₵${price}` : price;
+  const displayPrice = isPromo && promoPrice ? `₵${formatPrice(promoPrice)}` : `₵${formatPrice(price)}`;
+  const originalPrice = `₵${formatPrice(price)}`;
 
   return (
     <div className={`group relative flex flex-col gap-4 sm:gap-6 transition-all duration-500 ${!inStock ? 'opacity-80' : 'hover:-translate-y-1'}`}>
