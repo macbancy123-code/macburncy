@@ -45,10 +45,10 @@ export default function DiscoverRow({ product, isReversed }: DiscoverRowProps) {
           <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-amber-600">
             Fragrance Note No. 0{product.id}
           </span>
-          <h2 className="text-4xl md:text-6xl font-serif text-zinc-900 leading-[1.1]">
+          <h2 className="text-[24px] md:text-[40px] font-[family-name:var(--font-poppins)] font-normal text-zinc-900 leading-[100%]">
             {product.name}
           </h2>
-          <p className="text-sm font-light  text-zinc-400 tracking-wide">
+          <p className="text-[15px] font-[family-name:var(--font-inter)] font-normal text-zinc-400 leading-[100%] tracking-wide">
             {product.description}
           </p>
         </div>

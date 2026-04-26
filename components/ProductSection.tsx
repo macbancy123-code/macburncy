@@ -1,16 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { PRODUCTS } from "@/constants/products";
+import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getProducts, ProductData } from "@/lib/firestore";
 
 export default function ProductSection() {
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 3;
-  const maxIndex = PRODUCTS.length - itemsPerPage;
 
-  const visibleProducts = PRODUCTS.slice(startIndex, startIndex + itemsPerPage);
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const data = await getProducts();
+        if (data.length === 0) {
+          setProducts(STATIC_PRODUCTS as any);
+        } else {
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error(error);
+        setProducts(STATIC_PRODUCTS as any);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  const maxIndex = Math.max(0, products.length - itemsPerPage);
+  const visibleProducts = products.slice(startIndex, startIndex + itemsPerPage);
 
   const slideNext = () => {
     if (startIndex < maxIndex) {
@@ -25,7 +47,9 @@ export default function ProductSection() {
   };
 
   const getVisiblePages = () => {
-    const totalSteps = PRODUCTS.length - itemsPerPage + 1;
+    const totalSteps = Math.max(0, products.length - itemsPerPage + 1);
+    if (totalSteps === 0) return [];
+    
     let start = Math.max(0, startIndex - 1);
     let end = Math.min(totalSteps - 1, start + 2);
 
@@ -51,18 +75,18 @@ export default function ProductSection() {
           </h2>
         </div>
 
-        {/* Product Grid - Using a key to trigger animations on slide */}
+        {/* Product Grid */}
         <div
           key={startIndex}
           className="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-3 min-h-[400px]"
         >
-          {visibleProducts.map((product, index) => (
-            <div
-              key={product.id}
-              className="animate-in fade-in slide-in-from-right-4 duration-500 ease-out"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <ProductCard {...product} />
+          {loading ? (
+            <div className="col-span-full py-20 text-center text-zinc-400 font-bold uppercase tracking-widest animate-pulse">
+              Curating Scent Selection...
+            </div>
+          ) : visibleProducts.map((product) => (
+            <div key={product.id}>
+              <ProductCard {...(product as any)} />
             </div>
           ))}
         </div>

@@ -50,6 +50,7 @@ export default function CheckoutPage() {
                   key={item.id}
                   {...item}
                   onUpdateQuantity={updateQuantity}
+                  onRemove={removeFromCart}
                 />
               ))}
             </div>

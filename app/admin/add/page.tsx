@@ -158,7 +158,6 @@ export default function AddProductPage() {
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2 ml-1">Short Description</label>
                   <input 
-                    required
                     type="text" 
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}

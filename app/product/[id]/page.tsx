@@ -4,16 +4,21 @@ import { useState, useEffect, use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, ChevronLeft, ArrowRight } from "lucide-react";
-import { getProduct, getProducts, ProductData } from "@/lib/firestore";
+import { getProduct, getProducts, ProductData, rateProduct } from "@/lib/firestore";
 import ProductCard from "@/components/ProductCard";
 import AddToCartButton from "@/components/AddToCartButton";
 import { notFound } from "next/navigation";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [product, setProduct] = useState<ProductData | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userRating, setUserRating] = useState<number | null>(null);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [hasRated, setHasRated] = useState(false);
+  const [ratingLoading, setRatingLoading] = useState(false);
 
   useEffect(() => {
     async function fetchDetails() {
@@ -21,6 +26,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         const data = await getProduct(id);
         if (!data) return;
         setProduct(data);
+
+        // Check if already rated in this browser
+        const ratedBefore = localStorage.getItem(`rated_${id}`);
+        if (ratedBefore) setHasRated(true);
 
         // Fetch related
         const all = await getProducts();
@@ -34,6 +43,24 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     fetchDetails();
   }, [id]);
 
+  const handleRate = async (score: number) => {
+    if (hasRated || ratingLoading) return;
+    
+    setRatingLoading(true);
+    try {
+      const newRating = await rateProduct(id, score);
+      if (product) {
+        setProduct({ ...product, rating: newRating });
+      }
+      setHasRated(true);
+      localStorage.setItem(`rated_${id}`, "true");
+    } catch (error) {
+      console.error("Failed to rate:", error);
+    } finally {
+      setRatingLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
@@ -46,19 +73,16 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     notFound();
   }
 
-  // Mock Scent Profile (could be in DB too)
-  const scentProfile = {
-    top: ["Bergamot", "Saffron", "Black Pepper"],
-    heart: ["Incense", "Rose", "Oud"],
-    base: ["Sandalwood", "Amber", "Musk"],
-  };
 
   const displayPrice = product.isPromo && product.promoPrice ? `₵${product.promoPrice}` : `₵${product.price}`;
 
   return (
     <div className="min-h-screen bg-zinc-50">
+      {/* Spacer for floating navbar */}
+      <div className="h-32 md:h-44"></div>
+
       {/* Navigation / Breadcrumbs */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8 py-4">
         <Link
           href="/shop"
           className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors"
@@ -70,7 +94,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
       {/* Product Detail Section */}
       <section className="pb-16 lg:pb-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-x-12 gap-y-12 lg:grid-cols-2">
 
             {/* Product Image */}
@@ -115,40 +139,45 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                     <span className="text-sm text-zinc-400 line-through mt-1 ">₵{product.price}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={18}
-                        className={i < Math.floor(product.rating) ? "fill-black text-black" : "text-zinc-200"}
-                      />
-                    ))}
+                <div className="flex flex-col items-end gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          disabled={hasRated || ratingLoading}
+                          onMouseEnter={() => !hasRated && setHoverRating(star)}
+                          onMouseLeave={() => !hasRated && setHoverRating(null)}
+                          onClick={() => handleRate(star)}
+                          className={`transition-all duration-300 ${
+                            hasRated ? 'cursor-default' : 'cursor-pointer hover:scale-125 active:scale-95'
+                          } ${(hoverRating || (hasRated ? 0 : product.rating)) >= star ? "text-black" : "text-zinc-200"}`}
+                        >
+                          <Star 
+                            size={22} 
+                            className={`${(hoverRating || product.rating) >= star ? "fill-current" : ""}`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    <span className="text-lg font-bold text-black ml-2">
+                      {product.rating.toFixed(1)}
+                    </span>
                   </div>
-                  <span className="text-sm font-bold text-black ml-2">
-                    {product.rating.toFixed(1)} / 5.0
-                  </span>
+                  <AnimatePresence>
+                    {hasRated && (
+                      <motion.span 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-[10px] font-bold uppercase tracking-widest text-emerald-500"
+                      >
+                        Thanks for rating!
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
-              {/* Scent Profile */}
-              <div className="flex flex-col gap-6">
-                <h3 className="text-lg font-bold uppercase tracking-widest text-black">Fragrance Profile</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                  <div className="flex flex-col gap-2 text-center sm:text-left">
-                    <span className="text-xs font-bold uppercase text-zinc-400">Top Notes</span>
-                    <p className="text-sm font-medium text-zinc-900 leading-relaxed">{scentProfile.top.join(", ")}</p>
-                  </div>
-                  <div className="flex flex-col gap-2 text-center sm:text-left">
-                    <span className="text-xs font-bold uppercase text-zinc-400">Heart Notes</span>
-                    <p className="text-sm font-medium text-zinc-900 leading-relaxed">{scentProfile.heart.join(", ")}</p>
-                  </div>
-                  <div className="flex flex-col gap-2 text-center sm:text-left">
-                    <span className="text-xs font-bold uppercase text-zinc-400">Base Notes</span>
-                    <p className="text-sm font-medium text-zinc-900 leading-relaxed">{scentProfile.base.join(", ")}</p>
-                  </div>
-                </div>
-              </div>
 
               {/* Action */}
               <div className="mt-4 flex flex-col gap-4">

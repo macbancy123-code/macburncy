@@ -42,11 +42,11 @@ function ProductRow({ product, index }: { product: ProductData; index: number })
         className="w-full lg:flex-1 space-y-4 text-center lg:text-left"
       >
         <div className="space-y-1">
-          <h2 className="text-2xl lg:text-4xl font-bold tracking-tight text-zinc-900 leading-tight">
+          <h2 className="text-[24px] lg:text-[32px] font-[family-name:var(--font-poppins)] font-normal text-zinc-900 leading-[100%]">
             {product.name}
           </h2>
           {product.description && (
-            <p className="text-sm text-amber-600 font-medium  tracking-wide">
+            <p className="text-[15px] font-[family-name:var(--font-inter)] font-normal text-amber-600 leading-[100%] tracking-wide">
               {product.description}
             </p>
           )}

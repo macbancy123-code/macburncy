@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
 interface CartItemProps {
   id: string | number;
@@ -9,6 +9,7 @@ interface CartItemProps {
   quantity: number;
   imageSrc: string;
   onUpdateQuantity: (id: string | number, delta: number) => void;
+  onRemove: (id: string | number) => void;
 }
 
 export default function CartItem({
@@ -19,6 +20,7 @@ export default function CartItem({
   quantity,
   imageSrc,
   onUpdateQuantity,
+  onRemove,
 }: CartItemProps) {
   const totalPrice = pricePerUnit * quantity;
 
@@ -40,6 +42,13 @@ export default function CartItem({
           <h3 className="text-xl font-bold text-black">{name}</h3>
           <p className="text-zinc-500 text-sm">({variant})</p>
           <p className="text-zinc-400 text-sm mt-2">₵{pricePerUnit.toLocaleString()} per 1</p>
+          <button 
+            onClick={() => onRemove(id)}
+            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-red-500 transition-colors mt-4"
+          >
+            <Trash2 size={12} />
+            Remove
+          </button>
         </div>
       </div>
 

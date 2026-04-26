@@ -6,22 +6,32 @@ import Image from "next/image";
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "motion/react";
 
 export default function Navbar() {
   const { totalItems } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20 || pathname === "/shop");
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    
+    // Background change logic
+    setScrolled(latest > 20 || pathname === "/shop");
+
+    // Hide/Show logic
+    if (latest > previous && latest > 150) {
+      setIsVisible(false); // Scrolling down
+    } else {
+      setIsVisible(true); // Scrolling up
+    }
+  });
 
   useEffect(() => {
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
@@ -41,7 +51,18 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 z-50 flex w-full justify-center transition-all duration-500 pt-6">
+    <motion.nav 
+      initial={{ y: 0 }}
+      animate={{ 
+        y: isVisible ? 0 : -100,
+        opacity: isVisible ? 1 : 0
+      }}
+      transition={{ 
+        duration: 0.4, 
+        ease: [0.22, 1, 0.36, 1] 
+      }}
+      className="fixed top-0 z-50 flex w-full justify-center pt-6"
+    >
       <div className="relative w-[95%] max-w-7xl">
         {/* Main bar */}
         <div
@@ -144,6 +165,6 @@ export default function Navbar() {
           </div>
         )}
       </div>
-    </nav>
+    </motion.nav>
   );
 }

@@ -36,14 +36,6 @@ export default function ShopPage() {
       <div className="h-32 md:h-44"></div>
 
       <main className="w-full px-3 sm:px-6 md:px-12 lg:px-24 py-12">
-        <div className="flex flex-col gap-4 mb-10 sm:mb-16">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-black sm:text-5xl">
-            Our Collection
-          </h1>
-          <p className="text-base sm:text-lg text-zinc-500 max-w-2xl">
-            Discover our range of luxury African fragrances, each crafted with heritage and sophistication in mind.
-          </p>
-        </div>
 
         {loading ? (
           <div className="py-40 text-center text-zinc-400 font-medium">

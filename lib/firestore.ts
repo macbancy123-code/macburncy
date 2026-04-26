@@ -30,6 +30,8 @@ export interface ProductData {
   createdAt?: any;
   imageStoragePath?: string; // Track storage path for cleanup
   order?: number; // For manual arrangement
+  ratingCount?: number;
+  totalRatingScore?: number;
 }
 
 const PRODUCTS_COLLECTION = "products";
@@ -39,6 +41,8 @@ export const addProduct = async (product: Omit<ProductData, "id" | "createdAt">)
   try {
     const docRef = await addDoc(collection(db, PRODUCTS_COLLECTION), {
       ...product,
+      ratingCount: product.ratingCount || 1,
+      totalRatingScore: product.totalRatingScore || product.rating,
       createdAt: serverTimestamp(),
     });
     return docRef.id;
@@ -134,6 +138,34 @@ export const deleteProduct = async (id: string) => {
     throw error;
   }
 };
+
+// Rate a product (Updates average)
+export const rateProduct = async (id: string, score: number) => {
+  try {
+    const docRef = doc(db, PRODUCTS_COLLECTION, id);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return;
+
+    const data = docSnap.data();
+    const currentCount = data.ratingCount || 0;
+    const currentTotal = data.totalRatingScore || (data.rating * (currentCount || 1));
+    
+    const newCount = currentCount + 1;
+    const newTotal = currentTotal + score;
+    const newRating = Number((newTotal / newCount).toFixed(1));
+
+    await updateDoc(docRef, {
+      ratingCount: newCount,
+      totalRatingScore: newTotal,
+      rating: newRating
+    });
+    
+    return newRating;
+  } catch (error) {
+    console.error("Error rating product: ", error);
+    throw error;
+  }
+};
 // Seed Database (from static products)
 export const seedDatabase = async (initialProducts: any[]) => {
   try {
@@ -172,7 +204,9 @@ export const seedDatabase = async (initialProducts: any[]) => {
         isPromo: false,
         category: "Perfume",
         discoveryText: data.discoveryText || "A signature Mac Bancy fragrance.",
-        order: count + existing.length // Set an initial order
+        order: count + existing.length, // Set an initial order
+        ratingCount: 1,
+        totalRatingScore: data.rating || 5
       });
       count++;
     }
