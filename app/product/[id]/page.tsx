@@ -49,7 +49,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     setRatingLoading(true);
     try {
       const newRating = await rateProduct(id, score);
-      if (product) {
+      if (product && newRating !== undefined) {
         setProduct({ ...product, rating: newRating });
       }
       setHasRated(true);
