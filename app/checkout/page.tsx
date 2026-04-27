@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import CartItem from "@/components/CartItem";
-import OrderSummary from "@/components/OrderSummary";
+import dynamic from "next/dynamic";
+const OrderSummary = dynamic(() => import("@/components/OrderSummary"), { ssr: false });
 
 export default function CheckoutPage() {
   const { cart, updateQuantity, removeFromCart, subtotal } = useCart();
