@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Product } from "@/constants/products";
+import { ProductData } from "@/lib/firestore";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 
 interface DiscoverRowProps {
-  product: Product;
+  product: ProductData;
   isReversed?: boolean;
 }
 
