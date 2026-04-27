@@ -66,7 +66,7 @@ export default function CheckoutPage() {
             )}
 
             {/* Order Summary */}
-            {cart.length > 0 && <OrderSummary subtotal={subtotal} />}
+            {cart.length > 0 && <OrderSummary subtotal={subtotal} cart={cart} />}
           </div>
         </div>
       </section>

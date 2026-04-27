@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { useState } from "react";
 import { usePaystackPayment } from "react-paystack";
-import { CartItem } from "@/context/CartContext";
+import { CartItem, useCart } from "@/context/CartContext";
 import { CheckCircle2 } from "lucide-react";
 
 interface OrderSummaryProps {
@@ -14,6 +16,7 @@ export default function OrderSummary({ subtotal, cart }: OrderSummaryProps) {
   const [name, setName] = useState("");
   const [isPaid, setIsPaid] = useState(false);
   const [reference, setReference] = useState("");
+  const { clearCart } = useCart();
 
   const config = {
     reference: (new Date()).getTime().toString(),
@@ -39,6 +42,7 @@ export default function OrderSummary({ subtotal, cart }: OrderSummaryProps) {
     const message = `Hello Mac Bancy,\n\nI just made a payment of ₵${subtotal.toLocaleString()} for the following items:\n${productsList}\n\nPayment Reference: ${reference}\n\nPlease confirm my order. Thank you!`;
     const whatsappUrl = `https://wa.me/233543940123?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    clearCart();
   };
 
   return (
