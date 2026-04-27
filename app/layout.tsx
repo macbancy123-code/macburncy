@@ -31,6 +31,28 @@ import { CartProvider } from "@/context/CartContext";
 export const metadata: Metadata = {
   title: "Mac Bancy Perfume | Exquisite Fragrances",
   description: "Experience the art of luxury perfumery with Mac Bancy Perfume.",
+  openGraph: {
+    title: "Mac Bancy Perfume | Exquisite Fragrances",
+    description: "Experience the art of luxury perfumery with Mac Bancy Perfume.",
+    url: "https://macbancy.com",
+    siteName: "Mac Bancy Perfume",
+    images: [
+      {
+        url: "/mac-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Mac Bancy Perfume",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mac Bancy Perfume | Exquisite Fragrances",
+    description: "Experience the art of luxury perfumery with Mac Bancy Perfume.",
+    images: ["/mac-og.jpg"],
+  },
 };
 
 export default function RootLayout({

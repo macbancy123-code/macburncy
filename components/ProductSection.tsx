@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getProducts, ProductData } from "@/lib/firestore";
 
@@ -16,14 +15,9 @@ export default function ProductSection() {
     async function fetchProducts() {
       try {
         const data = await getProducts();
-        if (data.length === 0) {
-          setProducts(STATIC_PRODUCTS as any);
-        } else {
-          setProducts(data);
-        }
+        setProducts(data);
       } catch (error) {
-        console.error(error);
-        setProducts(STATIC_PRODUCTS as any);
+        console.error("Failed to fetch products:", error);
       } finally {
         setLoading(false);
       }

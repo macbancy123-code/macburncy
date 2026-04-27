@@ -2,12 +2,10 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getProducts, ProductData } from "@/lib/firestore";
-import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
+import { getProducts } from "@/lib/firestore";
 
-function ProductRow({ product, index }: { product: ProductData; index: number }) {
+function ProductRow({ product, index }: { product: any; index: number }) {
   const isReversed = index % 2 !== 0;
 
   return (
@@ -46,7 +44,7 @@ function ProductRow({ product, index }: { product: ProductData; index: number })
             {product.name}
           </h2>
           {product.description && (
-            <p className="text-[15px] font-[family-name:var(--font-inter)] font-normal text-amber-600 leading-[100%] tracking-wide">
+            <p className="text-[15px] font-[family-name:var(--font-inter)] mt-8 font-normal text-zinc-500 leading-[100%] tracking-wide">
               {product.description}
             </p>
           )}
@@ -62,28 +60,16 @@ function ProductRow({ product, index }: { product: ProductData; index: number })
 }
 
 export default function DiscoverPage() {
-  const [products, setProducts] = useState<ProductData[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProducts() {
       try {
         const data = await getProducts();
-        if (data.length === 0) {
-          // Map static products to match ProductData if needed
-          setProducts(STATIC_PRODUCTS.map(p => ({
-            ...p,
-            price: Number(p.price.replace(/[^0-9.-]+/g, "")),
-            inStock: true,
-            isPromo: false,
-            category: "Perfume"
-          })) as any);
-        } else {
-          setProducts(data);
-        }
+        setProducts(data);
       } catch (error) {
-        console.error(error);
-        setProducts(STATIC_PRODUCTS as any);
+        console.error("Failed to fetch products:", error);
       } finally {
         setLoading(false);
       }

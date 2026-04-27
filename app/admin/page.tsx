@@ -28,7 +28,6 @@ import {
   seedDatabase,
   updateProductsOrder 
 } from "@/lib/firestore";
-import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
@@ -98,18 +97,7 @@ export default function AdminDashboard() {
   };
 
   const handleSeed = async () => {
-    if (confirm("This will import the original collection into your live database. Continue?")) {
-      setLoading(true);
-      try {
-        const res = await seedDatabase(STATIC_PRODUCTS);
-        setMessage({ type: res.success ? 'success' : 'error', text: res.message });
-        fetchProducts();
-      } catch (error) {
-        setMessage({ type: 'error', text: 'Failed to seed database' });
-      } finally {
-        setLoading(false);
-      }
-    }
+    alert("Database seeding is disabled since you are managing products manually.");
   };
 
   const handleLogout = async () => {
@@ -145,6 +133,7 @@ export default function AdminDashboard() {
       await updateProduct(editingProduct.id!, {
         name: editingProduct.name,
         description: editingProduct.description,
+        discoveryText: editingProduct.discoveryText,
         price: Number(editingProduct.price),
         promoPrice: editingProduct.isPromo ? Number(editingProduct.promoPrice) : 0,
         isPromo: editingProduct.isPromo,
@@ -409,6 +398,16 @@ export default function AdminDashboard() {
                       value={editingProduct.description}
                       onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
                       className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Discover Page Story</label>
+                    <textarea 
+                      value={editingProduct.discoveryText || ""}
+                      onChange={(e) => setEditingProduct({...editingProduct, discoveryText: e.target.value})}
+                      rows={3}
+                      placeholder="Story for the Discover page..."
+                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none resize-none"
                     />
                   </div>
                 </div>

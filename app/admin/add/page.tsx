@@ -44,6 +44,7 @@ export default function AddProductPage() {
     inStock: true,
     isPromo: false,
     promoPrice: "" as any,
+    discoveryText: "",
   });
 
   // Mock notes for now
@@ -163,6 +164,17 @@ export default function AddProductPage() {
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
                     placeholder="e.g. Original / Midnight Collection"
                     className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2 ml-1">Discover Page Story</label>
+                  <textarea 
+                    value={formData.discoveryText}
+                    onChange={(e) => setFormData({...formData, discoveryText: e.target.value})}
+                    placeholder="Enter the long story/description for the Discover page..."
+                    rows={4}
+                    className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-black transition-all outline-none resize-none"
                   />
                 </div>
 

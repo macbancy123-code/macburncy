@@ -79,7 +79,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   return (
     <div className="min-h-screen bg-zinc-50">
       {/* Spacer for floating navbar */}
-      <div className="h-32 md:h-44"></div>
+      <div className="h-32 md:h-30"></div>
 
       {/* Navigation / Breadcrumbs */}
       <div className="mx-auto max-w-6xl px-6 lg:px-8 py-4">

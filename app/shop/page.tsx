@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import { getProducts, ProductData } from "@/lib/firestore";
-import { PRODUCTS as STATIC_PRODUCTS } from "@/constants/products";
 
 export default function ShopPage() {
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -13,16 +12,9 @@ export default function ShopPage() {
     async function fetchProducts() {
       try {
         const data = await getProducts();
-        // If DB is empty, fallback to static products for initial experience
-        if (data.length === 0) {
-          // You might want to seed the DB here or just show static
-          setProducts(STATIC_PRODUCTS as any);
-        } else {
-          setProducts(data);
-        }
+        setProducts(data);
       } catch (error) {
-        console.error(error);
-        setProducts(STATIC_PRODUCTS as any);
+        console.error("Failed to fetch products:", error);
       } finally {
         setLoading(false);
       }
