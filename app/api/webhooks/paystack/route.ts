@@ -11,7 +11,10 @@ export async function POST(req: Request) {
     const rawBody = await req.text();
     const signature = req.headers.get('x-paystack-signature');
 
+    console.log('--- Paystack Webhook Received ---');
+    
     if (!signature) {
+      console.error('Webhook Error: No signature found in headers');
       return NextResponse.json({ message: 'No signature' }, { status: 400 });
     }
 
@@ -19,14 +22,17 @@ export async function POST(req: Request) {
     const hash = crypto.createHmac('sha512', secret).update(rawBody).digest('hex');
 
     if (hash !== signature) {
+      console.error('Webhook Error: Invalid signature mismatch');
       return NextResponse.json({ message: 'Invalid signature' }, { status: 400 });
     }
 
     const event = JSON.parse(rawBody);
+    console.log('Webhook Event Type:', event.event);
 
     // Handle the charge.success event
     if (event.event === 'charge.success') {
       const data = event.data;
+      console.log('Payment Successful. Reference:', data.reference);
       
       // Extract metadata
       let cart = [];
@@ -36,6 +42,7 @@ export async function POST(req: Request) {
         if (data.metadata.cart) {
           try {
             cart = JSON.parse(data.metadata.cart);
+            console.log('Cart metadata parsed successfully');
           } catch (e) {
             console.error('Error parsing cart metadata:', e);
           }
@@ -49,28 +56,32 @@ export async function POST(req: Request) {
         reference: data.reference,
         customerName,
         customerEmail: data.customer.email,
-        amount: data.amount / 100, // Convert from kobo/pesewas back to standard unit
+        amount: data.amount / 100,
         cart,
         date: data.paid_at || new Date().toISOString(),
       };
 
       // 1. Save order to Firestore as paid
+      console.log('Saving order to Firestore...');
       const orderRef = doc(collection(db, 'orders'), data.reference);
       await setDoc(orderRef, {
         ...orderData,
         status: 'paid',
-        paystackResponse: data, // Keep the full payload for debugging/records
+        paystackResponse: data,
       });
+      console.log('Order saved to Firestore successfully');
 
       // 2. Send emails
-      await sendOrderConfirmationEmails(orderData);
+      console.log('Attempting to send order confirmation emails...');
+      const emailResults = await sendOrderConfirmationEmails(orderData);
+      console.log('Email Results:', emailResults);
       
       return NextResponse.json({ status: 'success' });
     }
 
     return NextResponse.json({ status: 'ignored' });
   } catch (error) {
-    console.error('Webhook Error:', error);
+    console.error('Webhook System Error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
