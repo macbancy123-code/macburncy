@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium tracking-wide text-zinc-100">
           <p>
-            2025 MacBancy. All rights reserved
+            2026 MacBancy. All rights reserved
           </p>
           <p className="text-zinc-400">
             @macbancy_perfumes
