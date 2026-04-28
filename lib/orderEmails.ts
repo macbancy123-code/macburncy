@@ -3,9 +3,9 @@ import { sendEmail } from './email';
 interface CartItem {
   id: string;
   name: string;
-  price: number;
+  pricePerUnit: number;
   quantity: number;
-  image: string;
+  imageSrc: string;
   variant?: string;
 }
 
@@ -32,7 +32,7 @@ export const sendOrderConfirmationEmails = async (order: OrderData) => {
         </div>
       </td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
-      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">₵${item.price.toLocaleString()}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">₵${item.pricePerUnit.toLocaleString()}</td>
     </tr>
   `).join('');
 
