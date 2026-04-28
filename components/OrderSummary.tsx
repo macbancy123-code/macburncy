@@ -27,10 +27,10 @@ export default function OrderSummary({ subtotal, cart }: OrderSummaryProps) {
     metadata: {
       cart: JSON.stringify(cart),
       customerName: name,
-    }
+    } as any
   };
 
-  const initializePayment = usePaystackPayment(config);
+  const initializePayment = usePaystackPayment(config as any);
 
   const onSuccess = (reference: any) => {
     setIsPaid(true);
