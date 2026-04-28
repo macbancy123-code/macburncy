@@ -41,7 +41,7 @@ export const sendOrderConfirmationEmails = async (order: OrderData) => {
     <div style="font-family: sans-serif; padding: 40px; background: #fafafa; color: #111;">
       <div style="max-width: 600px; margin: 0 auto; background: white; border: 1px solid #eee; border-radius: 20px; overflow: hidden;">
         <div style="background: black; padding: 40px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">Mac Bancy Atelier</h1>
+          <h1 style="color: white; margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">Mac Bancy Perfumes</h1>
         </div>
         <div style="padding: 40px;">
           <h2 style="font-size: 20px; margin-bottom: 20px;">Thank you for your order, ${order.customerName}!</h2>
