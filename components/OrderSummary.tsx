@@ -24,6 +24,10 @@ export default function OrderSummary({ subtotal, cart }: OrderSummaryProps) {
     amount: subtotal * 100, // Paystack uses kobo/pesewas
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "pk_test_placeholder",
     currency: "GHS",
+    metadata: {
+      cart: JSON.stringify(cart),
+      customerName: name,
+    }
   };
 
   const initializePayment = usePaystackPayment(config);
