@@ -66,6 +66,20 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${inter.variable} h-full antialiased dark`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Mac Bancy Perfume",
+              url: "https://macbancy.com",
+              logo: "https://macbancy.com/icon.png",
+            }),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-50">
         <CartProvider>
           <Navbar />
