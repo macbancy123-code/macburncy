@@ -29,6 +29,7 @@ import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://macbancy.com"),
   title: "Mac Bancy Perfume | Exquisite Fragrances",
   description: "Experience the art of luxury perfumery with Mac Bancy Perfume.",
   openGraph: {
