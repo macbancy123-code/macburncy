@@ -44,7 +44,7 @@ export default function OrderSummary({ subtotal, cart }: OrderSummaryProps) {
   const handleWhatsApp = () => {
     const productsList = cart.map(item => `- ${item.name} (${item.variant}) x${item.quantity}`).join('\n');
     const message = `Hello Mac Bancy,\n\nI just made a payment of ₵${subtotal.toLocaleString()} for the following items:\n${productsList}\n\nPayment Reference: ${reference}\n\nPlease confirm my order. Thank you!`;
-    const whatsappUrl = `https://wa.me/233543940123?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/233242250574?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     clearCart();
   };
