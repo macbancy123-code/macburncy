@@ -25,6 +25,7 @@ const inter = Inter({
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Script from "next/script";
 
 import { CartProvider } from "@/context/CartContext";
 
@@ -81,6 +82,19 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-50">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-BECXQDTZEZ"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-BECXQDTZEZ');
+          `}
+        </Script>
         <CartProvider>
           <Navbar />
           <main className="flex-grow">
